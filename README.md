@@ -7,7 +7,7 @@ The LMS (Learning Management System) for the members of KJo Academy
 ### Pre-requisites
 
 - Node v24.5.0 -> [endoflife.date](https://endoflife.date/nodejs)
-- pnpm v10.14.0
+- pnpm v10.14.0 -> [https://pnpm.io/installation#using-corepack](https://pnpm.io/installation#using-corepack)
 - Add `127.0.0.1 member.kjoacademy.localhost` to the `/etc/hosts` of your machine.
 - copy `.env.example` to `.env`
 
