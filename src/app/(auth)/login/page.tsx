@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { OtpDialog } from '@/components/otp-dialog';
 
 function LoginPage() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ function LoginPage() {
     errorMsg: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [showOtpDialog, setShowOtpDialog] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,12 +29,40 @@ function LoginPage() {
       // For demo purposes, show error if phone number is empty
       if (!formData.phoneNumber.trim()) {
         setFormData(prev => ({ ...prev, errorMsg: 'Please enter a valid phone number' }));
+        return;
       }
+      
+      // Show OTP dialog on successful submission
+      setShowOtpDialog(true);
     } catch (err) {
       setFormData(prev => ({ ...prev, errorMsg: 'An error occurred. Please try again.' }));
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleOtpVerify = async (otp: string) => {
+    // TODO: Implement OTP verification logic
+    console.log('OTP submitted:', otp);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // For demo purposes, show success and redirect
+    alert('OTP verified successfully!');
+    setShowOtpDialog(false);
+    // TODO: Redirect to dashboard or home page
+  };
+
+  const handleOtpResend = async () => {
+    // TODO: Implement OTP resend logic
+    console.log('Resending OTP to:', formData.phoneNumber);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Show success message
+    alert('OTP resent successfully!');
   };
 
   return (
@@ -81,6 +111,15 @@ function LoginPage() {
           </form>
         </CardContent>
       </Card>
+
+      {/* OTP Dialog */}
+      <OtpDialog
+        open={showOtpDialog}
+        onOpenChange={setShowOtpDialog}
+        phoneNumber={formData.phoneNumber}
+        onVerify={handleOtpVerify}
+        onResend={handleOtpResend}
+      />
     </div>
   );
 }
