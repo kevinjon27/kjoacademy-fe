@@ -1,0 +1,43 @@
+import Link from 'next/link';
+
+export default function UserLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const menuItems = [
+    { href: '/user/profile/public', label: 'View public profile' },
+    { href: '/user/profile', label: 'Profile' },
+    { href: '/user/notifications', label: 'Notifications' },
+    { href: '/auth/logout', label: 'Logout' },
+  ];
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="flex">
+        {/* Sidebar */}
+        <aside className="w-64 min-h-screen bg-card border-r border-border">
+          <div className="p-6">
+            <h2 className="text-lg font-semibold text-foreground mb-6">User Menu</h2>
+            <nav className="space-y-2">
+              {menuItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="block px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </aside>
+
+        {/* Main content */}
+        <main className="flex-1 p-6">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
