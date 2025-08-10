@@ -1,13 +1,36 @@
 export default function ModulesPage() {
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-6rem)]">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-foreground mb-4">
-          Welcome to the module
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-foreground mb-2">
+          Welcome to Modules
         </h1>
         <p className="text-muted-foreground">
-          This is the modules page of KJO Academy
+          This is the modules page of KJO Academy. Use the sidebar menu to navigate between different modules.
         </p>
+      </div>
+      
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="p-6 bg-card rounded-lg border">
+          <h3 className="font-semibold mb-2">Getting Started</h3>
+          <p className="text-sm text-muted-foreground">
+            Start with the onboarding module to get familiar with the platform.
+          </p>
+        </div>
+        
+        <div className="p-6 bg-card rounded-lg border">
+          <h3 className="font-semibold mb-2">Module A</h3>
+          <p className="text-sm text-muted-foreground">
+            Explore Module A to learn about the first set of concepts.
+          </p>
+        </div>
+        
+        <div className="p-6 bg-card rounded-lg border">
+          <h3 className="font-semibold mb-2">Module B</h3>
+          <p className="text-sm text-muted-foreground">
+            Continue with Module B to advance your knowledge further.
+          </p>
+        </div>
       </div>
     </div>
   );
