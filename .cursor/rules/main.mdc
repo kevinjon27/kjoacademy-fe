@@ -10,6 +10,7 @@ Important! You need to know that this project uses:
 
 - NextJS 15.4.6
 - typescript ^5
+- pnpm 10.14.0
 - tailwindcss ^4 for the CSS utility classes
 - shadcn to manage our ui components
 
@@ -21,3 +22,7 @@ Here are the project directories and their responsibilities:
   - the `ui` is used to contain the components that we generate with `shadcn`
 - `lib`: contains our helper functions
 - `config`: contains our configuration files and constants
+
+IMPORTANT:
+
+- Always use the `pnpm` to handle dependencies.
