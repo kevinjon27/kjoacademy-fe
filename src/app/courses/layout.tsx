@@ -1,15 +1,15 @@
 import Link from 'next/link';
 
-export default function ModulesLayout({
+export default function CoursesLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const menuItems = [
-    { href: '/modules', label: 'Home' },
-    { href: '/modules/onboarding', label: 'Onboarding' },
-    { href: '/modules/module-a', label: 'Module A' },
-    { href: '/modules/module-b', label: 'Module B' },
+    { href: '/courses', label: 'Home' },
+    { href: '/courses/onboarding', label: 'Onboarding' },
+    { href: '/courses/course-a', label: 'Course A' },
+    { href: '/courses/course-b', label: 'Course B' },
   ];
 
   return (
@@ -18,7 +18,7 @@ export default function ModulesLayout({
         {/* Sidebar */}
         <aside className="w-64 min-h-screen bg-card border-r border-border">
           <div className="p-6">
-            <h2 className="text-lg font-semibold text-foreground mb-6">Modules</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-6">Courses</h2>
             <nav className="space-y-2">
               {menuItems.map((item) => (
                 <Link

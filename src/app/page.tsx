@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
-  const latestModules = [
+  const latestCourses = [
     {
       id: 1,
       title: "Cryptocurrency Fundamentals",
@@ -34,7 +34,7 @@ export default function Home() {
       id: 1,
       name: "Sarah Johnson",
       role: "Software Developer",
-      content: "KJo Academy helped me understand cryptocurrency from scratch. The modules are well-structured and easy to follow.",
+              content: "KJo Academy helped me understand cryptocurrency from scratch. The courses are well-structured and easy to follow.",
       avatar: "/avatar-1.jpg"
     },
     {
@@ -63,17 +63,17 @@ export default function Home() {
             Let&apos;s learn cryptocurrency with KJo
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Master the world of digital currencies with our comprehensive learning modules
+            Master the world of digital currencies with our comprehensive learning courses
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/modules"
+              href="/courses"
               className="bg-primary-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
             >
               Start Learning
             </Link>
             <Link
-              href="/modules/onboarding"
+                              href="/courses/onboarding"
               className="border border-primary-500 text-primary-500 px-8 py-3 rounded-lg font-semibold hover:bg-primary-500 hover:text-white transition-colors"
             >
               Take Onboarding
@@ -82,12 +82,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Latest Course Modules Section */}
+      {/* Latest Courses Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-              Latest Course Modules
+              Latest Courses
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Explore our comprehensive curriculum designed to take you from beginner to expert
@@ -95,32 +95,32 @@ export default function Home() {
           </div>
           
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {latestModules.map((module) => (
-              <div
-                key={module.id}
-                className="bg-card rounded-lg border p-6 hover:shadow-lg transition-shadow"
-              >
-                <div className="h-48 bg-muted rounded-md mb-4 flex items-center justify-center">
-                  <span className="text-muted-foreground">Module Image</span>
+            {latestCourses.map((course) => (
+                              <div
+                  key={course.id}
+                  className="bg-card rounded-lg border p-6 hover:shadow-lg transition-shadow"
+                >
+                  <div className="h-48 bg-muted rounded-md mb-4 flex items-center justify-center">
+                    <span className="text-muted-foreground">Course Image</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground mb-2">
+                    {course.title}
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    {course.description}
+                  </p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">
+                      {course.duration} • {course.level}
+                    </span>
+                    <Link
+                      href={`/courses/${course.id}`}
+                      className="text-primary-500 hover:text-primary-600 font-medium"
+                    >
+                      Learn More →
+                    </Link>
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">
-                  {module.title}
-                </h3>
-                <p className="text-muted-foreground mb-4">
-                  {module.description}
-                </p>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">
-                    {module.duration} • {module.level}
-                  </span>
-                  <Link
-                    href={`/modules/${module.id}`}
-                    className="text-primary-500 hover:text-primary-600 font-medium"
-                  >
-                    Learn More →
-                  </Link>
-                </div>
-              </div>
             ))}
           </div>
         </div>

@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "KJO Academy - Learn Cryptocurrency Trading",
   description:
-    "Master the world of digital currencies with our comprehensive learning modules",
+    "Master the world of digital currencies with our comprehensive learning courses",
 };
 
 export default async function RootLayout({

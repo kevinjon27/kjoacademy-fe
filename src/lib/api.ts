@@ -53,9 +53,9 @@ export const privateApi = {
   getNotifications: () => ApiService.get('/user/notifications'),
   markNotificationAsRead: (id: string) => ApiService.patch(`/user/notifications/${id}/read`),
   
-  // Modules
-  getModules: () => ApiService.get('/modules'),
-  getModuleById: (id: string) => ApiService.get(`/modules/${id}`),
+  // Courses
+getCourses: () => ApiService.get('/courses'),
+getCourseById: (id: string) => ApiService.get(`/courses/${id}`),
   
   // Logout
   logout: () => ApiService.post('/auth/logout'),
