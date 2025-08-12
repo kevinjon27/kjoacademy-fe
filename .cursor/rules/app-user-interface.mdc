@@ -9,3 +9,4 @@ alwaysApply: true
 - Be really careful, do not break any components, layouts, pages that we have created
 - Make sure that any component that you create is responsive on mobile, tabs, and larger displays like laptop or pc monitor. It should be properly displayed and profesionally presented to the users' device.
 - Emphasis on the accessibility. Do not forget to add `aria` labels and other necessary properties to make sure that our web app is highly accessible
+- Provide necessary Interface or Type for the component props, states, and functions.
