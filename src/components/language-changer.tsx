@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { ChevronDown } from 'lucide-react';
 
 interface LanguageChangerProps {
   className?: string;
@@ -9,38 +11,60 @@ interface LanguageChangerProps {
 
 export function LanguageChanger({ className, onLanguageChange }: LanguageChangerProps) {
   const [currentLanguage, setCurrentLanguage] = useState('id');
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLanguage = event.target.value;
-    setCurrentLanguage(newLanguage);
-    onLanguageChange?.(newLanguage);
+  const languages = [
+    { code: 'id', flag: '🇮🇩', name: 'ID' },
+    { code: 'en', flag: '🇺🇸', name: 'EN' }
+  ];
+
+  const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
+
+  const handleLanguageSelect = (languageCode: string) => {
+    setCurrentLanguage(languageCode);
+    setIsOpen(false);
+    onLanguageChange?.(languageCode);
   };
 
   return (
     <div className={`relative ${className}`}>
-      <select
-        value={currentLanguage}
-        onChange={handleLanguageChange}
-        className="appearance-none bg-transparent border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 min-w-[80px] justify-between"
       >
-        <option value="id">🇮🇩 ID</option>
-        <option value="en">🇺🇸 EN</option>
-      </select>
-      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-        <svg
-          className="w-4 h-4 text-muted-foreground"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
-      </div>
+        <span className="flex items-center gap-1">
+          <span>{currentLang.flag}</span>
+          <span className="text-sm">{currentLang.name}</span>
+        </span>
+        <ChevronDown className="w-4 h-4" />
+      </Button>
+
+      {isOpen && (
+        <div className="absolute top-full right-0 mt-1 bg-card border border-border rounded-md shadow-lg z-50 min-w-[80px]">
+          {languages.map((language) => (
+            <button
+              key={language.code}
+              onClick={() => handleLanguageSelect(language.code)}
+              className={`w-full px-3 py-2 text-sm text-left hover:bg-accent transition-colors flex items-center gap-2 ${
+                currentLanguage === language.code ? 'bg-accent' : ''
+              }`}
+            >
+              <span>{language.flag}</span>
+              <span>{language.name}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Backdrop to close dropdown */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
     </div>
   );
 }
