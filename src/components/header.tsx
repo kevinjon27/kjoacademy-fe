@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { LanguageChanger } from '@/components/language-changer';
 
 export function Header() {
   return (
@@ -21,30 +22,7 @@ export function Header() {
           {/* Right side - Login and Language */}
           <div className="flex items-center space-x-4">
             {/* Language Selector */}
-            <div className="relative">
-              <select
-                className="appearance-none bg-transparent border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                defaultValue="id"
-              >
-                <option value="id">🇮🇩 ID</option>
-                <option value="en">🇺🇸 EN</option>
-              </select>
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-muted-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
-            </div>
+            <LanguageChanger />
 
             {/* Login Button */}
             <Link href="/login">
