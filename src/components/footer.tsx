@@ -1,7 +1,10 @@
 import Link from "next/link";
+import { getTranslations } from 'next-intl/server'
 import { InstagramIcon, TwitterIcon, YouTubeIcon } from "./icons";
 
-export function Footer() {
+export async function Footer() {
+  const t = await getTranslations('Footer')
+
   return (
     <footer className="bg-card border-t">
       <div className="min-h-[480px] lg:h-[480px] flex items-center">
@@ -11,22 +14,20 @@ export function Footer() {
             <div className="flex flex-col justify-center lg:justify-center space-y-6">
               <div className="space-y-4">
                 <h3 className="text-2xl font-bold text-foreground">
-                  Punya pertanyaan sebelum gabung?
+                  {t('title')}
                 </h3>
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  Ingin tahu lebih lanjut tentang komunitas, program, atau akses
-                  premium? Kita siap bantu kamu mulai perjalanan tradingmu
-                  dengan tepat.
+                  {t('description')}
                 </p>
               </div>
 
               {/* Contact/Support Info */}
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground">
-                  Hubungi kami di: support@kjoacademy.com
+                  {t('contact.email')}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Atau chat langsung dengan tim kami
+                  {t('contact.chat')}
                 </p>
               </div>
             </div>
@@ -36,20 +37,20 @@ export function Footer() {
               <div className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-24">
                 <div className="space-y-4">
                   <h4 className="text-lg font-semibold text-foreground">
-                    Kebijakan & Ketentuan
+                    {t('policies.title')}
                   </h4>
                   <div className="space-y-3">
                     <Link
                       href="/terms-and-conditions"
                       className="block text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      Terms and Conditions
+                      {t('policies.terms')}
                     </Link>
                     <Link
                       href="/refund-policy"
                       className="block text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      Refund and Return Policy
+                      {t('policies.refund')}
                     </Link>
                   </div>
                 </div>
@@ -57,26 +58,26 @@ export function Footer() {
                 {/* Additional Links */}
                 <div className="space-y-4">
                   <h4 className="text-lg font-semibold text-foreground">
-                    Informasi Lainnya
+                    {t('additional.title')}
                   </h4>
                   <div className="space-y-3">
                     <Link
                       href="/privacy-policy"
                       className="block text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      Privacy Policy
+                      {t('additional.privacy')}
                     </Link>
                     <Link
                       href="/about"
                       className="block text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      Tentang Kami
+                      {t('additional.about')}
                     </Link>
                     <Link
                       href="/contact"
                       className="block text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      Kontak
+                      {t('additional.contact')}
                     </Link>
                   </div>
                 </div>
@@ -85,7 +86,7 @@ export function Footer() {
               {/* Social Media */}
               <div className="space-y-4">
                 <h4 className="text-lg font-semibold text-foreground">
-                  Ikuti Kami
+                  {t('social.title')}
                 </h4>
                 <div className="flex space-x-4">
                   <a
@@ -120,7 +121,7 @@ export function Footer() {
           {/* Bottom Section - Copyright */}
           <div className="text-center">
             <p className="text-sm text-muted-foreground">
-              © 2024 KJO Academy. All rights reserved.
+              {t('copyright')}
             </p>
           </div>
         </div>
