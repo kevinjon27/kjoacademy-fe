@@ -1,17 +1,17 @@
 import { create } from "zustand";
 import { User } from "@/types/user";
 
-type State = {
+type AuthState = {
   user: User | null;
   isAuthenticated: boolean;
 };
 
-type Actions = {
+type AuthActions = {
   setUser: (user: User | null) => void;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
 };
 
-const useAuthStore = create<State & Actions>((set) => ({
+const useAuthStore = create<AuthState & AuthActions>((set) => ({
   // state
   user: null,
   isAuthenticated: false,

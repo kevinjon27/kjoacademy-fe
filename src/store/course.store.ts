@@ -1,17 +1,17 @@
 import { create } from "zustand";
 import { Course } from "@/types/course";
 
-type State = {
+type CourseState = {
   courses: Course[];
   selectedCourse: Course | null;
 };
 
-type Actions = {
+type CourseActions = {
   setCourses: (courses: Course[]) => void;
   setSelectedCourse: (course: Course | null) => void;
 };
 
-const useAuthStore = create<State & Actions>((set) => ({
+const useCourseStore = create<CourseState & CourseActions>((set) => ({
   // state
   courses: [],
   selectedCourse: null,
@@ -21,4 +21,4 @@ const useAuthStore = create<State & Actions>((set) => ({
   setSelectedCourse: (course) => set({ selectedCourse: course }),
 }));
 
-export default useAuthStore;
+export default useCourseStore;
