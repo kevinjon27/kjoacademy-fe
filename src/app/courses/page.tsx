@@ -1,3 +1,58 @@
+import { CourseList } from "./course-list";
+import { Course } from "@/types/course";
+
+// Mock course data for demonstration
+const mockCourses: Course[] = [
+  {
+    id: 1,
+    title: "Cryptocurrency Fundamentals",
+    slug: "cryptocurrency-fundamentals",
+    thumbnail_url: "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=400&h=225&fit=crop",
+    bg_img_url: "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=1200&h=600&fit=crop",
+    enrolled_count: 1250
+  },
+  {
+    id: 2,
+    title: "Advanced Trading Strategies",
+    slug: "advanced-trading-strategies",
+    thumbnail_url: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=225&fit=crop",
+    bg_img_url: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&h=600&fit=crop",
+    enrolled_count: 890
+  },
+  {
+    id: 3,
+    title: "DeFi & Smart Contracts",
+    slug: "defi-smart-contracts",
+    thumbnail_url: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400&h=225&fit=crop",
+    bg_img_url: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200&h=600&fit=crop",
+    enrolled_count: 567
+  },
+  {
+    id: 4,
+    title: "Blockchain Development",
+    slug: "blockchain-development",
+    thumbnail_url: "https://images.unsplash.com/photo-1639762681057-408e52192e55?w=400&h=225&fit=crop",
+    bg_img_url: "https://images.unsplash.com/photo-1639762681057-408e52192e55?w=1200&h=600&fit=crop",
+    enrolled_count: 432
+  },
+  {
+    id: 5,
+    title: "NFT & Digital Art",
+    slug: "nft-digital-art",
+    thumbnail_url: "https://images.unsplash.com/photo-1620321023374-d1a68fbc720d?w=400&h=225&fit=crop",
+    bg_img_url: "https://images.unsplash.com/photo-1620321023374-d1a68fbc720d?w=1200&h=600&fit=crop",
+    enrolled_count: 789
+  },
+  {
+    id: 6,
+    title: "Crypto Portfolio Management",
+    slug: "crypto-portfolio-management",
+    thumbnail_url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=225&fit=crop",
+    bg_img_url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=600&fit=crop",
+    enrolled_count: 654
+  }
+];
+
 export default function CoursesPage() {
   return (
     <div className="space-y-6">
@@ -6,32 +61,11 @@ export default function CoursesPage() {
           Welcome to Courses
         </h1>
         <p className="text-muted-foreground">
-          This is the courses page of KJO Academy. Use the sidebar menu to navigate between different courses.
+          This is the courses page of KJO Academy. Explore our comprehensive curriculum designed to take you from beginner to expert.
         </p>
       </div>
       
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="p-6 bg-card rounded-lg border">
-          <h3 className="font-semibold mb-2">Getting Started</h3>
-          <p className="text-sm text-muted-foreground">
-            Start with the onboarding module to get familiar with the platform.
-          </p>
-        </div>
-        
-        <div className="p-6 bg-card rounded-lg border">
-          <h3 className="font-semibold mb-2">Module A</h3>
-          <p className="text-sm text-muted-foreground">
-            Explore Module A to learn about the first set of concepts.
-          </p>
-        </div>
-        
-        <div className="p-6 bg-card rounded-lg border">
-          <h3 className="font-semibold mb-2">Module B</h3>
-          <p className="text-sm text-muted-foreground">
-            Continue with Module B to advance your knowledge further.
-          </p>
-        </div>
-      </div>
+      <CourseList courses={mockCourses} />
     </div>
   );
 }

@@ -11,3 +11,9 @@ alwaysApply: true
 - Emphasis on the accessibility. Do not forget to add `aria` labels and other necessary properties to make sure that our web app is highly accessible
 - Provide necessary Interface or Type for the component props, states, and functions.
 - If you need to put an icon on the component, use the icons from the `lucide-react` library
+
+## Pages and Their components
+
+- IT IS IMPORTANT TO KEEP any `page.tsx` and `layout.tsx` component as Server Side components
+- If the a child component within a `page.tsx` needs interactivity, event handlers, states, and hooks. You should create a separated component for it and make sure it is marked with `use client`
+- Prefer to colocate the child component near the corresponding `page.tsx` that needs it.
