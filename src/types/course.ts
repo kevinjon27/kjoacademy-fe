@@ -10,6 +10,7 @@ export type Course = {
   id: number;
   title: string;
   slug: string;
+  description: string;
   thumbnail_url: string;
   bg_img_url: string;
   enrolled_count: number;
@@ -26,6 +27,6 @@ export type CourseLecture = {
   id: number;
   title: string;
   media_url: string;
-  media_type: "video" | "imaeg" | "audio";
+  media_type: "video" | "image" | "audio";
   duration_seconds: number;
 };
