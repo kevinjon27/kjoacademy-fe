@@ -18,7 +18,7 @@ export default async function LessonDetailPage({ params }: Props) {
   // TODO: get the course and lesson data from the backend
 
   return (
-    <div className="flex flex-col lg:flex-row">
+    <section className="flex flex-col lg:flex-row">
       <div className="flex-1">
         <CoursePlaybackSection
           mediaType="video/mp4"
@@ -27,6 +27,6 @@ export default async function LessonDetailPage({ params }: Props) {
         <CourseInfoSection className="p-8" />
       </div>
       <CourseModulesContentSection />
-    </div>
+    </section>
   );
 }
