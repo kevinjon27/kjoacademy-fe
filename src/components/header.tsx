@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { cookies } from 'next/headers'
+import { cookies } from "next/headers";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { LanguageChanger } from "@/components/language-changer";
 
@@ -14,12 +15,12 @@ export async function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">K</span>
-              </div>
-              <span className="text-xl font-bold text-foreground">
-                KJO Academy
-              </span>
+              <Image
+                src="/img/kjoacademy-logo.webp"
+                alt="KJO Academy"
+                width={200}
+                height={96}
+              />
             </Link>
           </div>
 
