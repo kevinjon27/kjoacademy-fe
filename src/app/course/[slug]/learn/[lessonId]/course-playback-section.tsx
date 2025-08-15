@@ -13,7 +13,7 @@ export default function CoursePlaybackSection({
   className,
 }: Props) {
   return (
-    <div className={cn("course-playback-section flex-1 h-[520px]", className)}>
+    <div className={cn("course-playback-section", className)}>
       <VideoPlayer
         options={{
           controls: true,
