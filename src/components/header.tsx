@@ -15,12 +15,16 @@ export async function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <Image
-                src="/img/kjoacademy-logo.webp"
-                alt="KJO Academy"
-                width={200}
-                height={96}
-              />
+              <div className="w-[200px]">
+                <Image
+                  src="/img/kjoacademy-logo.webp"
+                  alt="KJO Academy"
+                  width={967}
+                  height={166}
+                  priority
+                  decoding="async"
+                />
+              </div>
             </Link>
           </div>
 
