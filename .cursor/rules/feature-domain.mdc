@@ -1,0 +1,11 @@
+---
+description: Feature Domain
+globs:
+alwaysApply: true
+---
+
+# Feature Domain Of the App
+
+- `app/user`: Handling user profile and logout
+- `app/courses`: Handling course categories, list courses by categories
+- `app/course`: Handling particular course details, course lecture media playback
