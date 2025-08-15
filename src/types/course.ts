@@ -23,7 +23,7 @@ export type CourseModule = {
   duration_seeconds: number;
 };
 
-export type CourseLecture = {
+export type CourseLesson = {
   id: number;
   title: string;
   media_url: string;

@@ -1,5 +1,5 @@
 import { CourseDetails } from "./course-details";
-import { Course, CourseModule, CourseLecture } from "@/types/course";
+import { Course, CourseModule, CourseLesson } from "@/types/course";
 
 export type Props = {
   params: Promise<{
@@ -45,7 +45,7 @@ const mockModules: CourseModule[] = [
   }
 ];
 
-const mockLectures: Record<number, CourseLecture[]> = {
+const mockLessons: Record<number, CourseLesson[]> = {
   1: [
     {
       id: 1,
@@ -245,7 +245,7 @@ export default async function CourseDetailPage({ params }: Props) {
   // For now, using mock data
   const course = mockCourse;
   const modules = mockModules;
-  const lectures = mockLectures;
+  const lectures = mockLessons;
 
   return (
     <div className="container mx-auto px-4 py-8">

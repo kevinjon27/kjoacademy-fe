@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Play, Video, Image as ImageIcon, Headphones, Clock, Users } from "lucide-react";
-import { Course, CourseModule, CourseLecture } from "@/types/course";
+import { Course, CourseModule, CourseLesson } from "@/types/course";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -11,7 +11,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 interface CourseDetailsProps {
   course: Course;
   modules: CourseModule[];
-  lectures: Record<number, CourseLecture[]>;
+  lectures: Record<number, CourseLesson[]>;
 }
 
 export function CourseDetails({ course, modules, lectures }: CourseDetailsProps) {
@@ -38,8 +38,8 @@ export function CourseDetails({ course, modules, lectures }: CourseDetailsProps)
     return `${minutes}m`;
   };
 
-  const getTotalDuration = (lectures: CourseLecture[]) => {
-    return lectures.reduce((total, lecture) => total + lecture.duration_seconds, 0);
+  const getTotalDuration = (lectures: CourseLesson[]) => {
+    return lectures.reduce((total, lesson) => total + lesson.duration_seconds, 0);
   };
 
   return (
@@ -85,24 +85,24 @@ export function CourseDetails({ course, modules, lectures }: CourseDetailsProps)
                     <span className="font-medium">{modules.length}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Total Lectures</span>
+                    <span className="text-muted-foreground">Total Lessons</span>
                     <span className="font-medium">
-                      {Object.values(lectures).reduce((total, moduleLectures) => total + moduleLectures.length, 0)}
+                      {Object.values(lectures).reduce((total, moduleLessons) => total + moduleLessons.length, 0)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Duration</span>
                     <span className="font-medium">
                       {formatDuration(
-                        Object.values(lectures).reduce((total, moduleLectures) => 
-                          total + getTotalDuration(moduleLectures), 0
+                        Object.values(lectures).reduce((total, moduleLessons) => 
+                          total + getTotalDuration(moduleLessons), 0
                         )
                       )}
                     </span>
                   </div>
                 </div>
                 
-                <Link href={`/courses/${course.slug}/learn`}>
+                <Link href={`/course/${course.slug}/learn`}>
                   <Button className="w-full" size="lg">
                     <Play className="h-4 w-4 mr-2" />
                     Start Course
@@ -127,8 +127,8 @@ export function CourseDetails({ course, modules, lectures }: CourseDetailsProps)
 
         <Accordion type="single" collapsible className="space-y-4">
           {modules.map((module) => {
-            const moduleLectures = lectures[module.id] || [];
-            const moduleDuration = getTotalDuration(moduleLectures);
+            const moduleLessons = lectures[module.id] || [];
+            const moduleDuration = getTotalDuration(moduleLessons);
             
             return (
               <AccordionItem
@@ -156,22 +156,22 @@ export function CourseDetails({ course, modules, lectures }: CourseDetailsProps)
                 
                 <AccordionContent>
                   <div className="space-y-3 pb-4">
-                    {moduleLectures.map((lecture) => (
+                    {moduleLessons.map((lesson) => (
                       <div
-                        key={lecture.id}
+                        key={lesson.id}
                         className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors"
                       >
                         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary">
-                          {getMediaTypeIcon(lecture.media_type)}
+                          {getMediaTypeIcon(lesson.media_type)}
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="font-medium text-sm truncate">
-                            {lecture.title}
+                            {lesson.title}
                           </h4>
                         </div>
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
                           <Clock className="h-3 w-3" />
-                          <span>{formatDuration(lecture.duration_seconds)}</span>
+                          <span>{formatDuration(lesson.duration_seconds)}</span>
                         </div>
                       </div>
                     ))}

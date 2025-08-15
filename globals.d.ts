@@ -8,3 +8,11 @@ declare module "next-intl" {
     Formats: typeof formats;
   }
 }
+
+declare module "video.js" {
+  export type VideoJsPlayer = {
+    dispose: () => void;
+    isDisposed: () => boolean;
+    src: (sources: { src: string; type: string }[]) => void;
+  };
+}
