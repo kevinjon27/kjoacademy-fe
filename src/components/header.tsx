@@ -15,7 +15,7 @@ export async function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-[200px]">
+              <div className="w-[180px]">
                 <Image
                   src="/img/kjoacademy-logo.webp"
                   alt="KJO Academy"
