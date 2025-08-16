@@ -1,11 +1,13 @@
 import dynamic from "next/dynamic";
-import CourseLessonHeader from "./course-lesson-header";
-import CourseModulesContentSection from "./course-modules-content-section";
+import CourseLessonHeader from "@/components/course/course-lesson-header";
+import CourseModulesContentSection from "@/components/course/course-modules-content-section";
 
 const CoursePlaybackSection = dynamic(
-  () => import("./course-playback-section")
+  () => import("@/components/course/course-playback-section")
 );
-const CourseInfoSection = dynamic(() => import("./course-info-section"));
+const CourseInfoSection = dynamic(
+  () => import("@/components/course/course-info-section")
+);
 
 export type Props = {
   params: Promise<{

@@ -1,6 +1,6 @@
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { CourseDetails } from "./course-details";
+import { CourseDetails } from "@/components/course/course-details";
 import { Course, CourseModule, CourseLesson } from "@/types/course";
 
 export type Props = {
