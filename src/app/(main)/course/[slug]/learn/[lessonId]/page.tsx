@@ -33,7 +33,9 @@ export default async function LessonDetailPage({ params }: Props) {
           />
           <CourseInfoSection className="p-8" />
         </div>
-        <CourseModulesContentSection />
+        <div className="hidden lg:block lg:w-[400px] lg:h-[calc(100vh-61px)]">
+          <CourseModulesContentSection />
+        </div>
       </section>
     </>
   );

@@ -9,7 +9,7 @@ import {
 
 export default function CourseModulesContentSection() {
   return (
-    <div className="course-modules-content-section w-full lg:w-[400px]">
+    <div className="course-modules-content-section w-full h-full overflow-y-auto">
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger className="px-6">Is it accessible?</AccordionTrigger>
