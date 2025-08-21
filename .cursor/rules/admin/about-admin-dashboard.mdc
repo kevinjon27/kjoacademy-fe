@@ -5,8 +5,10 @@ alwaysApply: false
 
 # The Admin Dashboard of KJO Academy LMS
 
+- The admin dashboard will be used to manage the course categories, courses, modules, and lessons across the app
 - The admin routes and pages are placed within `app/admin` directory.
 - It has its own `layout.tsx` component
 - Use the shared components from the `src/components` directory whenever possible
 - If an Admin page needs a dedicated component and it is specific for Admin site only, create the components in `src/components/admin`
 - Leave the `src/components/ui` directory for generated shadcn components
+- The admin page does not need translations. Use English for the wordings.
