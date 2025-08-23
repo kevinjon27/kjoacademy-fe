@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
+import { axiosClientNext } from "@/lib/axios.client";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -25,6 +26,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const response = await axiosClientNext.post("/auth/session");
+  console.log("response", response.headers);
   const locale = await getLocale();
 
   return (

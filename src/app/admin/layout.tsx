@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
+import { COOKIE_KEYS } from "@/config/storage";
+import { axiosClientNext } from "@/lib/axios.client";
+import { cookies } from "next/headers";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -18,11 +21,18 @@ export const metadata: Metadata = {
   description: "Manage KJO Academy LMS",
 };
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const response = await axiosClientNext.post(
+    "/auth/session",
+    {},
+    { withCredentials: true }
+  );
+  console.log("response", response.headers);
+
   return (
     <html>
       <body
