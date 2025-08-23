@@ -12,7 +12,7 @@ alwaysApply: true
 - The form component should obviously be a client component. Mark them with `use client`
 - Leverage the React's `useActionState` hook to handle form state and errors.
 - I need you think thoroughly about the `initialState` that should be fed into the `useActionState` hook. It should be tailored to the specific needs of the form.
-- I want you to always include `{ message: string | null, errors: SpecificFormErrorType, defaultValue }`
+- I want you to always include `{ message: string | null, errors: SpecificFormErrorType, defaultValue, axiosError?: { status: number, errors: Record<string, string[]>} }`
 - You should use this guide for any complex form, such as category creation and update.
 - Simple forms like OTP challenge and search form do not need this approach.
 

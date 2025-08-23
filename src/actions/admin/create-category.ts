@@ -29,6 +29,10 @@ export type CreateCategoryFormState = {
     slug: string;
     description: string;
   };
+  axiosError?: {
+    status: number;
+    errors: Record<string, string[]>;
+  };
 };
 
 // Server action
@@ -64,15 +68,20 @@ export async function createCategoryAction(
     };
 
     await createCourseCategory(data);
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
     return {
       errors: {},
-      message: "Something went wrong. Failed to create category.",
+      message:
+        error.response?.data?.message ||
+        "Something went wrong. Failed to create category.",
       defaultValue: {
         title,
         slug,
         description,
+      },
+      axiosError: {
+        status: error.response?.status || 500,
+        errors: error.response?.data?.errors || {},
       },
     };
   }
