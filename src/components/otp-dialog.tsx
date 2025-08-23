@@ -120,6 +120,7 @@ export function OtpDialog({ open, onOpenChange, phoneNumber, onVerify, onResend 
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 className="w-12 h-12 text-center text-lg font-semibold"
                 disabled={isLoading}
+                autoComplete='off'
               />
             ))}
           </div>
