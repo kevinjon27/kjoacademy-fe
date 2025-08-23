@@ -18,13 +18,13 @@ export function CategoryCard({ category, ...rest }: Props) {
     <Card className="hover:shadow-lg transition-shadow" {...rest}>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className={`p-2 rounded-lg`}>
+          <div className="flex items-center space-x-2 flex-1 min-w-0">
+            <div className={`p-2 rounded-lg flex-shrink-0`}>
               <FolderOpen className="h-5 w-5" />
             </div>
-            <CardTitle className="text-lg">{category.title}</CardTitle>
+            <CardTitle className="text-lg line-clamp-2">{category.title}</CardTitle>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 flex-shrink-0">
             <Button variant="ghost" size="sm">
               <Edit className="h-4 w-4" />
             </Button>
@@ -39,7 +39,7 @@ export function CategoryCard({ category, ...rest }: Props) {
         </div>
       </CardHeader>
       <CardContent>
-        <CardDescription className="mb-4">
+        <CardDescription className="mb-4 line-clamp-2">
           {category.description}
         </CardDescription>
         <div className="flex items-center justify-between">
