@@ -2,6 +2,7 @@ import { axiosServerNext } from "@/lib/axios.server";
 import { NEXT_PUBLIC_API_ROUTE_URL } from "@/config/api";
 import { cookies } from "next/headers";
 import { COOKIE_KEYS } from "@/config/storage";
+// import { redirect } from "next/navigation";
 
 export async function requestLoginOTP(phone: string) {
   "use server";
@@ -9,11 +10,11 @@ export async function requestLoginOTP(phone: string) {
     `${NEXT_PUBLIC_API_ROUTE_URL}/auth/request-otp`,
     {
       phone,
-      purpose: "student-login",
+      purpose: "admin-login",
     }
   );
 
-  console.log("response from request login with otp student");
+  console.log("response from request login with otp admin");
   console.table(response.data);
 }
 
@@ -24,11 +25,11 @@ export async function signInWithOtp(phone: string, otp: string) {
     {
       phone,
       otp,
-      purpose: "student-login",
+      purpose: "admin-login",
     }
   );
 
-  console.log("response from verify login with otp student");
+  console.log("response from verify login with otp admin");
   console.table(response.data);
 
   // Set the access token cookie directly in the server action

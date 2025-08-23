@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 import { LS_KEYS } from "@/config/storage";
 import { axiosClientNext } from "@/lib/axios.client";
 import { Button } from "@/components/ui/button";
@@ -18,10 +18,14 @@ export type OtpRequestData = {
 };
 
 export type Props = {
-  signInWithOtp: (phone: string, otp: string) => Promise<void>;
+  requestLoginOTP: (phone: string) => Promise<void>;
+  signInWithOtp: (
+    phone: string,
+    otp: string
+  ) => Promise<{ access_token: string; user: any } | null>;
 };
 
-export default function LoginForm({ signInWithOtp }: Props) {
+export default function LoginForm({ requestLoginOTP, signInWithOtp }: Props) {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -47,7 +51,7 @@ export default function LoginForm({ signInWithOtp }: Props) {
     }
   }, []);
 
-  const requestLoginOTP = async (e: React.FormEvent) => {
+  const onPhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormData((prev) => ({ ...prev, errorMsg: "" }));
     setIsLoading(true);
@@ -63,10 +67,7 @@ export default function LoginForm({ signInWithOtp }: Props) {
       }
 
       // Execute OTP Request here
-      await axiosClientNext.post("/api/auth/request-otp", {
-        phone: formData.phone,
-        purpose: "admin-login",
-      });
+      await requestLoginOTP(formData.phone);
       // if success, set the otp request data in local storage
       const currentTime = dayjs().toISOString();
       const otpRequestData: OtpRequestData = {
@@ -118,7 +119,7 @@ export default function LoginForm({ signInWithOtp }: Props) {
         </CardHeader>
         <CardContent className="space-y-6">
           <form
-            onSubmit={requestLoginOTP}
+            onSubmit={onPhoneSubmit}
             autoComplete="off"
             className="space-y-6"
           >
