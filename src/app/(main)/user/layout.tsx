@@ -1,14 +1,15 @@
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { withStudentProtection } from "@/guards/withAuthProtected.server";
+import { withStudentAreaProtection } from "@/guards/withAuthProtected.server";
 
 export default async function UserLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  await withStudentProtection();
+  // Check authentication and role access - redirects admins to admin site
+  await withStudentAreaProtection();
 
   const menuItems = [
     { href: "/user/profile/public", label: "View public profile" },

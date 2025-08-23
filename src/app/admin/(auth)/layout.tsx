@@ -1,15 +1,12 @@
-import { redirect } from "next/navigation";
-import { getAuthData } from "@/lib/auth";
+import { withAdminAuthProtection } from "@/guards/withAuthProtected.server";
 
 export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const authData = await getAuthData();
-  if (authData) {
-    redirect("/admin");
-  }
+  // Redirect authenticated users to their appropriate areas
+  await withAdminAuthProtection();
 
-  return <div>{children}</div>;
+  return children;
 }

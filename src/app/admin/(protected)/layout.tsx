@@ -2,15 +2,15 @@ import { API_BASE_URL } from "@/config/api";
 import { axiosServer } from "@/lib/axios.server";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { AdminNavigation } from "@/components/admin/admin-navigation";
-import { withAdminProtection } from "@/guards/withAuthProtected.server";
+import { withAdminAreaProtection } from "@/guards/withAuthProtected.server";
 
 export default async function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // Check authentication and role access
-  const authResult = await withAdminProtection();
+  // Check authentication and role access - redirects students to student site
+  const authResult = await withAdminAreaProtection();
   
   async function signOutFromApp() {
     "use server";

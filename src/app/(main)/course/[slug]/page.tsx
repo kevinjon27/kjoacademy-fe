@@ -1,7 +1,7 @@
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CourseDetails } from "@/components/course/course-details";
-import { withStudentProtection } from "@/guards/withAuthProtected.server";
+import { withStudentAreaProtection } from "@/guards/withAuthProtected.server";
 import { Course, CourseModule, CourseLesson } from "@/types/course";
 
 export type Props = {
@@ -245,7 +245,8 @@ const mockLessons: Record<number, CourseLesson[]> = {
 };
 
 export default async function CourseDetailPage({ params }: Props) {
-  await withStudentProtection();
+  // Check authentication and role access - redirects admins to admin site
+  await withStudentAreaProtection();
   
   const { slug } = await params;
 
