@@ -5,7 +5,7 @@ import axios, {
   AxiosRequestConfig,
 } from "axios";
 import { cookies } from "next/headers";
-import { API_BASE_URL, NEXT_API_ROUTE_URL } from "@/config/api";
+import { API_BASE_URL, NEXT_PUBLIC_API_ROUTE_URL } from "@/config/api";
 import { COOKIE_KEYS } from "@/config/storage";
 
 async function getDeviceId(): Promise<string> {
@@ -61,7 +61,7 @@ axiosServer.interceptors.response.use(
 );
 
 const axiosServerNext: AxiosInstance = axios.create({
-  baseURL: NEXT_API_ROUTE_URL,
+  baseURL: NEXT_PUBLIC_API_ROUTE_URL,
   timeout: 10000,
   headers: {
     common: {

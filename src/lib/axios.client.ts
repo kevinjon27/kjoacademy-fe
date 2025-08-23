@@ -5,7 +5,7 @@ import axios, {
   AxiosRequestConfig,
 } from "axios";
 import Cookies from "js-cookie";
-import { API_BASE_URL, NEXT_API_ROUTE_URL } from "@/config/api";
+import { API_BASE_URL, NEXT_PUBLIC_API_ROUTE_URL } from "@/config/api";
 import { COOKIE_KEYS } from "@/config/storage";
 
 function getDeviceId(): string {
@@ -60,7 +60,7 @@ axiosClient.interceptors.response.use(
 
 // Use this instance to make requests to the Next.js API route
 const axiosClientNext: AxiosInstance = axios.create({
-  baseURL: NEXT_API_ROUTE_URL,
+  baseURL: NEXT_PUBLIC_API_ROUTE_URL,
   timeout: 10000,
   headers: {
     common: {
