@@ -5,4 +5,5 @@ export const LS_KEYS = {
 export const COOKIE_KEYS = {
   sessionId: "session_id",
   deviceId: "device_id",
+  accessToken: "access_token",
 };

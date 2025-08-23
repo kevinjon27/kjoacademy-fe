@@ -10,16 +10,14 @@ import { COOKIE_KEYS } from "@/config/storage";
 
 async function getDeviceId(): Promise<string> {
   const cookieStore = await cookies();
-  const deviceId = cookieStore.get(COOKIE_KEYS.deviceId)!.value;
-
-  // if (!deviceId) {
-  //   const newDeviceId = crypto.randomUUID();
-  //   const cookieStore = await cookies();
-  //   cookieStore.set(COOKIE_KEYS.deviceId, newDeviceId);
-  //   return newDeviceId;
-  // }
-
+  const deviceId = cookieStore.get(COOKIE_KEYS.deviceId)?.value || "";
   return deviceId;
+}
+
+async function getAccessToken(): Promise<string> {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get(COOKIE_KEYS.accessToken)?.value || "";
+  return accessToken;
 }
 
 // Use this instance to make requests to the KJO Academy API
@@ -34,28 +32,33 @@ const axiosServer: AxiosInstance = axios.create({
   },
 });
 
-// axiosServer.interceptors.request.use(async (config) => {
-//   console.log("headers");
-//   config.headers["X-Device-Id"] = await getDeviceId();
-//   config.headers["X-Request-Id"] = crypto.randomUUID();
-//   console.table(config.headers);
-//   return config;
-// });
+axiosServer.interceptors.request.use(async (config) => {
+  const accessToken = await getAccessToken();
+  if (accessToken) {
+    config.headers["Authorization"] = `Bearer ${accessToken}`;
+  }
+  const deviceId = await getDeviceId();
+  if (deviceId) {
+    config.headers["X-Device-Id"] = deviceId;
+  }
+  config.headers["X-Request-Id"] = crypto.randomUUID();
+  return config;
+});
 
-// axiosServer.interceptors.response.use(
-//   (response: AxiosResponse) => {
-//     return response;
-//   },
-//   async (error: AxiosError) => {
-//     const originalRequest = error.config as AxiosRequestConfig & {
-//       _retry?: boolean;
-//     };
+axiosServer.interceptors.response.use(
+  (response: AxiosResponse) => {
+    return response;
+  },
+  async (error: AxiosError) => {
+    const originalRequest = error.config as AxiosRequestConfig & {
+      _retry?: boolean;
+    };
 
-//     // @TODO: Handle 401 Unauthorized error
+    // @TODO: Handle 401 Unauthorized error
 
-//     return Promise.reject(error);
-//   }
-// );
+    return Promise.reject(error);
+  }
+);
 
 const axiosServerNext: AxiosInstance = axios.create({
   baseURL: NEXT_API_ROUTE_URL,
@@ -68,27 +71,24 @@ const axiosServerNext: AxiosInstance = axios.create({
   },
 });
 
-[axiosServer, axiosServerNext].forEach((instance) => {
-  instance.interceptors.request.use(async (config) => {
-    config.headers["X-Device-Id"] = await getDeviceId();
-    config.headers["X-Request-Id"] = crypto.randomUUID();
-    return config;
-  });
-
-  instance.interceptors.response.use(
-    (response: AxiosResponse) => {
-      return response;
-    },
-    async (error: AxiosError) => {
-      const originalRequest = error.config as AxiosRequestConfig & {
-        _retry?: boolean;
-      };
-
-      // @TODO: Handle 401 Unauthorized error
-
-      return Promise.reject(error);
-    }
-  );
+axiosServerNext.interceptors.request.use(async (config) => {
+  config.headers["X-Request-Id"] = crypto.randomUUID();
+  return config;
 });
+
+axiosServerNext.interceptors.response.use(
+  (response: AxiosResponse) => {
+    return response;
+  },
+  async (error: AxiosError) => {
+    const originalRequest = error.config as AxiosRequestConfig & {
+      _retry?: boolean;
+    };
+
+    // @TODO: Handle 401 Unauthorized error
+
+    return Promise.reject(error);
+  }
+);
 
 export { axiosServer, axiosServerNext };

@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { COOKIE_KEYS } from "@/config/storage";
-import { axiosClientNext } from "@/lib/axios.client";
-import { cookies } from "next/headers";
+import { SessionProvider } from "next-auth/react";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -26,22 +24,17 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const response = await axiosClientNext.post(
-    "/auth/session",
-    {},
-    { withCredentials: true }
-  );
-  console.log("response", response.headers);
-
   return (
     <html>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider>
-          <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            {children}
-          </div>
+          <SessionProvider>
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+              {children}
+            </div>
+          </SessionProvider>
         </NextIntlClientProvider>
       </body>
     </html>

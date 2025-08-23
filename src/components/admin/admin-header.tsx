@@ -3,7 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export function AdminHeader() {
+export type Props = {
+  signOutFromApp: () => Promise<void>;
+};
+
+export function AdminHeader({ signOutFromApp }: Props) {
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
       <div className="flex items-center justify-between px-6 py-4">
@@ -40,7 +44,7 @@ export function AdminHeader() {
             <User className="h-4 w-4" />
             <span>Admin User</span>
           </div>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={signOutFromApp}>
             <LogOut className="h-4 w-4 mr-2" />
             Logout
           </Button>
