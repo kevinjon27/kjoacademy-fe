@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { BaseDialog } from '@/components/ui/base-dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import * as React from "react";
+import { BaseDialog } from "@/components/ui/base-dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface OtpDialogProps {
   open: boolean;
@@ -13,13 +13,19 @@ interface OtpDialogProps {
   onResend: () => Promise<void>;
 }
 
-export function OtpDialog({ open, onOpenChange, phoneNumber, onVerify, onResend }: OtpDialogProps) {
-  const [otp, setOtp] = React.useState(['', '', '', '', '', '']);
+export function OtpDialog({
+  open,
+  onOpenChange,
+  phoneNumber,
+  onVerify,
+  onResend,
+}: OtpDialogProps) {
+  const [otp, setOtp] = React.useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isResending, setIsResending] = React.useState(false);
-  const [error, setError] = React.useState('');
+  const [error, setError] = React.useState("");
   const [countdown, setCountdown] = React.useState(0);
-  
+
   const inputRefs = React.useRef<(HTMLInputElement | null)[]>([]);
 
   // Countdown timer for resend
@@ -39,11 +45,11 @@ export function OtpDialog({ open, onOpenChange, phoneNumber, onVerify, onResend 
 
   const handleOtpChange = (index: number, value: string) => {
     if (value.length > 1) return; // Prevent multiple characters
-    
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-    setError(''); // Clear error when user types
+    setError(""); // Clear error when user types
 
     // Auto-focus next input
     if (value && index < 5) {
@@ -52,26 +58,26 @@ export function OtpDialog({ open, onOpenChange, phoneNumber, onVerify, onResend 
   };
 
   const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
       // Move to previous input on backspace if current is empty
       inputRefs.current[index - 1]?.focus();
     }
   };
 
   const handleVerify = async () => {
-    const otpString = otp.join('');
+    const otpString = otp.join("");
     if (otpString.length !== 6) {
-      setError('Please enter the complete 6-digit OTP');
+      setError("Please enter the complete 6-digit OTP");
       return;
     }
 
     setIsLoading(true);
-    setError('');
-    
+    setError("");
+
     try {
       await onVerify(otpString);
     } catch (err) {
-      setError('Invalid OTP. Please try again.');
+      setError("Invalid OTP. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -79,13 +85,13 @@ export function OtpDialog({ open, onOpenChange, phoneNumber, onVerify, onResend 
 
   const handleResend = async () => {
     setIsResending(true);
-    setError('');
-    
+    setError("");
+
     try {
       await onResend();
       setCountdown(60); // Start 60-second countdown
     } catch (err) {
-      setError('Failed to resend OTP. Please try again.');
+      setError("Failed to resend OTP. Please try again.");
     } finally {
       setIsResending(false);
     }
@@ -120,11 +126,11 @@ export function OtpDialog({ open, onOpenChange, phoneNumber, onVerify, onResend 
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 className="w-12 h-12 text-center text-lg font-semibold"
                 disabled={isLoading}
-                autoComplete='off'
+                autoComplete="none"
               />
             ))}
           </div>
-          
+
           {/* Error message */}
           {error && (
             <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-md">
@@ -137,9 +143,9 @@ export function OtpDialog({ open, onOpenChange, phoneNumber, onVerify, onResend 
         <Button
           onClick={handleVerify}
           className="w-full h-11"
-          disabled={isLoading || otp.join('').length !== 6}
+          disabled={isLoading || otp.join("").length !== 6}
         >
-          {isLoading ? 'Verifying...' : 'Verify OTP'}
+          {isLoading ? "Verifying..." : "Verify OTP"}
         </Button>
 
         {/* Resend Section */}
@@ -153,7 +159,7 @@ export function OtpDialog({ open, onOpenChange, phoneNumber, onVerify, onResend 
               disabled={isResending}
               className="text-sm text-primary hover:underline disabled:opacity-50"
             >
-              {isResending ? 'Sending...' : 'Resend OTP'}
+              {isResending ? "Sending..." : "Resend OTP"}
             </button>
           ) : (
             <p className="text-sm text-muted-foreground">
