@@ -1,12 +1,18 @@
 import { axiosServer } from "@/lib/axios.server";
-import { CourseCategoryRequest } from "@/types/dto/course-category-request";
-import { CourseCategoryResponse } from "@/types/dto/course-category-response";
+import {
+  GetCourseCategoryRequest,
+  CreateCourseCategoryRequest,
+} from "@/types/dto/course-category-request";
+import {
+  GetCourseCategoryResponse,
+  CreateCourseCategoryResponse,
+} from "@/types/dto/course-category-response";
 
 const BASE_URL = "/v1/admin/categories";
 
 export const getCourseCategories = async (
-  params: CourseCategoryRequest
-): Promise<CourseCategoryResponse> => {
+  params: GetCourseCategoryRequest
+): Promise<GetCourseCategoryResponse> => {
   const response = await axiosServer.get(BASE_URL, {
     params: params || {},
   });
@@ -14,11 +20,17 @@ export const getCourseCategories = async (
 };
 
 export const getCourseCategoryBySlug = async (slug: string) => {
-  const response = await axiosServer.get(`v1/admin/course-categories/${slug}`);
+  const response = await axiosServer.get(`${BASE_URL}/${slug}`);
   return response.data;
 };
 
-export const createCourseCategory = async (data: any) => {
-  const response = await axiosServer.post(`/admin/course-categories`, data);
-  return response.data;
+export const createCourseCategory = async (
+  data: CreateCourseCategoryRequest
+): Promise<CreateCourseCategoryResponse> => {
+  try {
+    const response = await axiosServer.post(BASE_URL, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };

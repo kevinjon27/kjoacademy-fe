@@ -1,12 +1,12 @@
 import { axiosClient } from "@/lib/axios.client";
-import { CourseCategoryRequest } from "@/types/dto/course-category-request";
-import { CourseCategoryResponse } from "@/types/dto/course-category-response";
+import { GetCourseCategoryRequest } from "@/types/dto/course-category-request";
+import { GetCourseCategoryResponse } from "@/types/dto/course-category-response";
 
 const BASE_URL = "/v1/admin/categories";
 
 export const getCourseCategories = async (
-  params: CourseCategoryRequest
-): Promise<CourseCategoryResponse> => {
+  params: GetCourseCategoryRequest
+): Promise<GetCourseCategoryResponse> => {
   const response = await axiosClient.get(BASE_URL, {
     params: params || {},
   });
