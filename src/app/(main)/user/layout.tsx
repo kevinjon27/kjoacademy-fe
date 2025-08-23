@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { withStudentProtection } from "@/guards/withAuthProtected.server";
 
-export default function UserLayout({
+export default async function UserLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  await withStudentProtection();
+
   const menuItems = [
     { href: "/user/profile/public", label: "View public profile" },
     { href: "/user/profile", label: "Profile" },

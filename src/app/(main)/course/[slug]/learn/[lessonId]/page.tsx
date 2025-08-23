@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { withStudentProtection } from "@/guards/withAuthProtected.server";
 import CourseLessonHeader from "@/components/course/course-lesson-header";
 import CourseModulesContentSection from "@/components/course/course-modules-content-section";
 
@@ -17,6 +18,7 @@ export type Props = {
 };
 
 export default async function LessonDetailPage({ params }: Props) {
+  await withStudentProtection();
   const { slug, lessonId } = await params;
   // TODO: get the course and lesson data from the backend
 

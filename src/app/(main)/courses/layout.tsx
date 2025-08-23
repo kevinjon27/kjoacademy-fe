@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { withStudentProtection } from "@/guards/withAuthProtected.server";
 
-export default function CoursesLayout({
+export default async function CoursesLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  await withStudentProtection();
+
   const menuItems = [
     { href: "/courses", label: "Home" },
     { href: "/courses/onboarding", label: "Onboarding" },

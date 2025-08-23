@@ -1,6 +1,7 @@
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CourseDetails } from "@/components/course/course-details";
+import { withStudentProtection } from "@/guards/withAuthProtected.server";
 import { Course, CourseModule, CourseLesson } from "@/types/course";
 
 export type Props = {
@@ -244,6 +245,8 @@ const mockLessons: Record<number, CourseLesson[]> = {
 };
 
 export default async function CourseDetailPage({ params }: Props) {
+  await withStudentProtection();
+  
   const { slug } = await params;
 
   // TODO: Fetch real course data based on slug
