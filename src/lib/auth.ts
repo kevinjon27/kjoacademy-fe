@@ -5,7 +5,7 @@ import { User } from "@/types/user";
 
 export async function getAuthData(): Promise<null | {
   accessToken: string;
-  user: Omit<User, "id">;
+  user: Omit<User, "id"> | null;
 }> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(COOKIE_KEYS.accessToken);
@@ -17,6 +17,6 @@ export async function getAuthData(): Promise<null | {
 
   return {
     accessToken: accessToken.value,
-    user: JSON.parse(userData.value),
+    user: userData.value ? JSON.parse(userData.value) : null,
   };
 }
