@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
+import { Toaster } from "@/components/ui/sonner";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -32,6 +33,7 @@ export default async function AdminLayout({
           <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
             {children}
           </div>
+          <Toaster />
         </NextIntlClientProvider>
       </body>
     </html>
