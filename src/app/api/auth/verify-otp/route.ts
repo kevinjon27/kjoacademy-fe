@@ -13,19 +13,12 @@ import { API_BASE_URL } from "@/config/api";
 export async function POST(request: NextRequest) {
   try {
     const { phone, otp, purpose } = await request.json();
-
     const res = await axiosServer.post(`${API_BASE_URL}/v1/auth/verify-otp`, {
       phone,
       otp: otp,
       purpose,
     });
-
-    console.log("From this verify otp");
-    console.table(request.headers);
-    console.table(res.headers);
-    console.table(res.data);
-
-    return NextResponse.json(res.data);;
+    return NextResponse.json(res.data, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error, message: "Failed to verify OTP" },

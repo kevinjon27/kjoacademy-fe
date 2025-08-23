@@ -15,17 +15,10 @@ import { API_BASE_URL } from "@/config/api";
 export async function POST(request: NextRequest) {
   try {
     const { phone, purpose } = await request.json();
-
     const response = await axiosServer.post(
       `${API_BASE_URL}/v1/auth/request-otp`,
       { phone, purpose }
     );
-
-    console.log("From this request otp");
-    console.table(request.headers);
-    console.table(response.headers);
-    console.table(response.data);
-
     return NextResponse.json(response.data, { status: 200 });
   } catch (error) {
     console.error("Error requesting OTP", error);
