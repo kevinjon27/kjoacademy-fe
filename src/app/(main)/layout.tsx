@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
-import { axiosClientNext } from "@/lib/axios.client";
+import { AuthProvider } from "@/contexts/AuthContext";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -26,8 +26,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const response = await axiosClientNext.post("/auth/session");
-  console.log("response", response.headers);
   const locale = await getLocale();
 
   return (
@@ -36,7 +34,11 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
       >
         <NextIntlClientProvider>
-          <main className="min-h-screen flex flex-1 flex-col">{children}</main>
+          <AuthProvider>
+            <main className="min-h-screen flex flex-1 flex-col">
+              {children}
+            </main>
+          </AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>

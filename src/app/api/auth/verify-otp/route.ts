@@ -14,21 +14,18 @@ export async function POST(request: NextRequest) {
   try {
     const { phone, otp, purpose } = await request.json();
 
-    const response = await axiosServer.post(
-      `${API_BASE_URL}/v1/auth/verify-otp`,
-      {
-        phone,
-        otp: otp,
-        purpose,
-      }
-    );
+    const res = await axiosServer.post(`${API_BASE_URL}/v1/auth/verify-otp`, {
+      phone,
+      otp: otp,
+      purpose,
+    });
 
     console.log("From this verify otp");
     console.table(request.headers);
-    console.table(response.headers);
-    console.table(response.data);
+    console.table(res.headers);
+    console.table(res.data);
 
-    return NextResponse.json(response.data);
+    return NextResponse.json(res.data);;
   } catch (error) {
     return NextResponse.json(
       { error, message: "Failed to verify OTP" },

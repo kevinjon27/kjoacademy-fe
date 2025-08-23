@@ -1,6 +1,4 @@
-import { redirect } from "next/navigation";
 import { API_BASE_URL } from "@/config/api";
-import { auth, signOut } from "@/lib/auth";
 import { axiosServer } from "@/lib/axios.server";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { AdminNavigation } from "@/components/admin/admin-navigation";
@@ -10,16 +8,11 @@ export default async function ProtectedLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-  if (!session?.user) {
-    return redirect("/admin/login");
-  }
-
   async function signOutFromApp() {
     "use server";
     try {
       await axiosServer.post(`${API_BASE_URL}/v1/auth/logout`);
-      await signOut();
+      // await signOut();
     } catch (error) {
       console.error("Sign out error:", error);
       throw error;
