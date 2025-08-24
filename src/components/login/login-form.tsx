@@ -18,10 +18,14 @@ export type OtpRequestData = {
 };
 
 export type Props = {
-  requestLoginOTP: (phone: string) => Promise<void>;
+  requestLoginOTP: (
+    phone: string,
+    purpose: "admin-login" | "student-login"
+  ) => Promise<void>;
   signInWithOtp: (
     phone: string,
-    otp: string
+    otp: string,
+    purpose: "admin-login" | "student-login"
   ) => Promise<{ access_token: string; user: any } | null>;
 };
 
@@ -67,7 +71,7 @@ export default function LoginForm({ requestLoginOTP, signInWithOtp }: Props) {
       }
 
       // Execute OTP Request here
-      await requestLoginOTP(formData.phone);
+      await requestLoginOTP(formData.phone, "student-login");
       // if success, set the otp request data in local storage
       const currentTime = dayjs().toISOString();
       const otpRequestData: OtpRequestData = {
@@ -95,7 +99,7 @@ export default function LoginForm({ requestLoginOTP, signInWithOtp }: Props) {
   // verify and sign in with OTP
   const verifyLoginOTP = async (otp: string) => {
     try {
-      const result = await signInWithOtp(formData.phone, otp);
+      const result = await signInWithOtp(formData.phone, otp, "student-login");
       if (result) {
         setShowOtpDialog(false);
         localStorage.setItem(LS_KEYS.userData, JSON.stringify(result.user));

@@ -1,12 +1,10 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import Image from "next/image";
-import { API_BASE_URL } from "@/config/api";
-import { COOKIE_KEYS } from "@/config/storage";
 import { getAuthData } from "@/lib/auth";
-import { axiosServer } from "@/lib/axios.server";
 import { LanguageChanger } from "@/components/language-changer";
 import HeaderAuthButton from "@/components/header-auth-button";
+import { signOut } from "@/actions/auth";
 
 export async function Header() {
   const cookieStore = await cookies();
@@ -14,20 +12,6 @@ export async function Header() {
 
   const authData = await getAuthData();
   const isAuthenticated = !!authData?.accessToken;
-
-  async function signOut() {
-    "use server";
-    try {
-      await axiosServer.post(`${API_BASE_URL}/v1/auth/logout`);
-      // remove auth data from cookies
-      const cookieStore = await cookies();
-      cookieStore.delete(COOKIE_KEYS.accessToken);
-      cookieStore.delete(COOKIE_KEYS.userData);
-    } catch (error) {
-      console.error("Sign out error:", error);
-      throw error;
-    }
-  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-primary-700 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

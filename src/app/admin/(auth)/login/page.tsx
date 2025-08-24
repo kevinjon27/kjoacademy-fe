@@ -1,5 +1,5 @@
 import LoginForm from "@/components/admin/login/login-form";
-import { requestLoginOTP, signInWithOtp } from "./actions";
+import { requestLoginOTP, signInWithOtp } from "@/actions/auth";
 
 async function LoginPage() {
   return (

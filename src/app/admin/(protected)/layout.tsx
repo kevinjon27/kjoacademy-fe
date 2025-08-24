@@ -1,10 +1,7 @@
-import { cookies } from "next/headers";
-import { API_BASE_URL } from "@/config/api";
-import { COOKIE_KEYS } from "@/config/storage";
-import { axiosServer } from "@/lib/axios.server";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { AdminNavigation } from "@/components/admin/admin-navigation";
 import { withAdminAreaProtection } from "@/guards/withAuthProtected.server";
+import { signOut } from "@/actions/auth";
 
 export default async function ProtectedLayout({
   children,
@@ -13,20 +10,6 @@ export default async function ProtectedLayout({
 }) {
   // Check authentication and role access - redirects students to student site
   await withAdminAreaProtection();
-
-  async function signOut() {
-    "use server";
-    try {
-      await axiosServer.post(`${API_BASE_URL}/v1/auth/logout`);
-      // remove auth data from cookies
-      const cookieStore = await cookies();
-      cookieStore.delete(COOKIE_KEYS.accessToken);
-      cookieStore.delete(COOKIE_KEYS.userData);
-    } catch (error) {
-      console.error("Sign out error:", error);
-      throw error;
-    }
-  }
 
   return (
     <div className="h-screen flex flex-col">
