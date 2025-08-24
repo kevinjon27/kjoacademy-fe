@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -22,12 +23,16 @@ export function CategoryCard({ category, ...rest }: Props) {
             <div className={`p-2 rounded-lg flex-shrink-0`}>
               <FolderOpen className="h-5 w-5" />
             </div>
-            <CardTitle className="text-lg line-clamp-2">{category.title}</CardTitle>
+            <CardTitle className="text-lg line-clamp-2">
+              {category.title}
+            </CardTitle>
           </div>
           <div className="flex items-center space-x-2 flex-shrink-0">
-            <Button variant="ghost" size="sm">
-              <Edit className="h-4 w-4" />
-            </Button>
+            <Link href={`/admin/categories/${category.slug}/edit`}>
+              <Button variant="ghost" size="sm">
+                <Edit className="h-4 w-4" />
+              </Button>
+            </Link>
             <Button
               variant="ghost"
               size="sm"

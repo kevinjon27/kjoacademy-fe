@@ -28,6 +28,7 @@ alwaysApply: true
 - Manage the API that needs to be called inside the `src/api`. Put the api into their respective sub directories inside (`/student` or `/admin`).
   - The .ts file should be the name of the feature domain (course-categories, courses, modules, lessons, enrollments, .etc)
   - Use the `axiosClient` instance because it will be used for client side API calls
+  - Don't forget to add their respective request and response types.
 - A form might be reused for create and edit purpose
 
 ## Submitting the Form
