@@ -14,7 +14,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { createCourseCategory } from "@/api/admin/course-category";
+import { createCourseCategory, updateCourseCategory } from "@/api/admin/course-category";
+import { CourseCategory } from "@/types/course-category";
 
 // Validation schema
 const createCategorySchema = z.object({
@@ -48,6 +49,12 @@ type FormState = {
   submitError: string | null;
 };
 
+// Form props type
+interface CategoryFormProps {
+  isEdit?: boolean;
+  categoryData?: CourseCategory;
+}
+
 // Form actions
 type FormAction =
   | { type: "SET_FIELD"; field: keyof FormData; value: string }
@@ -57,16 +64,16 @@ type FormAction =
   | { type: "RESET" };
 
 // Initial form state
-const initialState: FormState = {
+const getInitialState = (categoryData?: CourseCategory): FormState => ({
   data: {
-    title: "",
-    slug: "",
-    description: "",
+    title: categoryData?.title || "",
+    slug: categoryData?.slug || "",
+    description: categoryData?.description || "",
   },
   errors: {},
   isSubmitting: false,
   submitError: null,
-};
+});
 
 // Form reducer
 function formReducer(state: FormState, action: FormAction): FormState {
@@ -99,7 +106,7 @@ function formReducer(state: FormState, action: FormAction): FormState {
         submitError: action.error,
       };
     case "RESET":
-      return initialState;
+      return getInitialState();
     default:
       return state;
   }
@@ -121,8 +128,8 @@ function validateField(
   }
 }
 
-export function CreateCategoryForm() {
-  const [state, dispatch] = useReducer(formReducer, initialState);
+export function CategoryForm({ isEdit = false, categoryData }: CategoryFormProps) {
+  const [state, dispatch] = useReducer(formReducer, getInitialState(categoryData));
   const router = useRouter();
 
   // Handle field changes with real-time validation
@@ -161,12 +168,17 @@ export function CreateCategoryForm() {
     dispatch({ type: "SET_SUBMITTING", isSubmitting: true });
 
     try {
-      await createCourseCategory(state.data);
+      if (isEdit && categoryData) {
+        await updateCourseCategory(categoryData.slug, state.data);
+      } else {
+        await createCourseCategory(state.data);
+      }
       router.push("/admin/categories");
       return null;
     } catch (error: any) {
       const errorMessage =
-        error.response?.data?.message || "Failed to create category";
+        error.response?.data?.message || 
+        (isEdit ? "Failed to update category" : "Failed to create category");
       dispatch({ type: "SET_SUBMIT_ERROR", error: errorMessage });
       return errorMessage;
     } finally {
@@ -177,9 +189,12 @@ export function CreateCategoryForm() {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle>Create New Category</CardTitle>
+        <CardTitle>{isEdit ? "Edit Category" : "Create New Category"}</CardTitle>
         <CardDescription>
-          Add a new course category to organize your courses.
+          {isEdit 
+            ? "Update the course category information."
+            : "Add a new course category to organize your courses."
+          }
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -261,7 +276,10 @@ export function CreateCategoryForm() {
               disabled={state.isSubmitting}
               className="flex-1"
             >
-              {state.isSubmitting ? "Creating..." : "Create Category"}
+              {state.isSubmitting 
+                ? (isEdit ? "Updating..." : "Creating...") 
+                : (isEdit ? "Update Category" : "Create Category")
+              }
             </Button>
             <Button
               type="button"

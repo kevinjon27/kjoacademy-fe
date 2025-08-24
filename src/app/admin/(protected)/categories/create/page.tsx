@@ -1,4 +1,4 @@
-import { CreateCategoryForm } from "@/components/admin/categories/create-category-form";
+import { CategoryForm } from "@/components/admin/categories/category-form";
 
 export default function CreateCategoryPage() {
   return (
@@ -10,7 +10,7 @@ export default function CreateCategoryPage() {
         </p>
       </div>
       
-      <CreateCategoryForm />
+      <CategoryForm />
     </div>
   );
 }

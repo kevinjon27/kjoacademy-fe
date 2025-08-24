@@ -7,3 +7,8 @@ export type CreateCourseCategoryResponse = {
   message: string;
   data: CourseCategory;
 };
+
+export type UpdateCourseCategoryResponse = {
+  message: string;
+  data: CourseCategory;
+};

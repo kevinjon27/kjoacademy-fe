@@ -7,3 +7,9 @@ export type CreateCourseCategoryRequest = {
   slug: string;
   description: string;
 };
+
+export type UpdateCourseCategoryRequest = {
+  title: string;
+  slug: string;
+  description: string;
+};
