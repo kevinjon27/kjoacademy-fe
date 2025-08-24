@@ -33,13 +33,13 @@ export function CategoryCard({ category, ...rest }: Props) {
                 <Edit className="h-4 w-4" />
               </Button>
             </Link>
-            <Button
+            {/* <Button
               variant="ghost"
               size="sm"
               className="text-red-600 hover:text-red-700"
             >
               <Trash2 className="h-4 w-4" />
-            </Button>
+            </Button> */}
           </div>
         </div>
       </CardHeader>
