@@ -1,7 +1,37 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { COOKIE_KEYS } from "@/config/storage";
+import { API_BASE_URL } from "@/config/api";
+import { queryParams } from "@/lib/query-params";
 import { Button } from "@/components/ui/button";
 import CategoryList from "@/components/admin/categories/category-list";
+import { GetCourseCategoryRequest } from "@/types/dto/course-category-request";
+import { GetCourseCategoryResponse } from "@/types/dto/course-category-response";
+
+async function getCourseCategories(
+  query: GetCourseCategoryRequest
+): Promise<GetCourseCategoryResponse> {
+  const cookieStore = await cookies();
+  const urlSearch = queryParams(query);
+  const url = `${API_BASE_URL}/v1/admin/categories?${urlSearch.toString()}`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${
+        cookieStore.get(COOKIE_KEYS.accessToken)?.value
+      }`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch course categories");
+  }
+
+  return response.json();
+}
 
 type Props = {
   searchParams?: Promise<{
@@ -13,9 +43,11 @@ type Props = {
 
 export default async function AdminCategoriesPage(props: Props) {
   const searchParams = await props.searchParams;
-  const q = searchParams?.q || "";
-  const page = searchParams?.page || "1";
+  const q = searchParams?.q;
+  const page = searchParams?.page;
   const perPage = searchParams?.perPage;
+
+  const { data: categories } = await getCourseCategories({ q, page, perPage });
 
   return (
     <div className="space-y-6">
@@ -36,7 +68,7 @@ export default async function AdminCategoriesPage(props: Props) {
         </Link>
       </div>
 
-      <CategoryList q={q} page={page} perPage={perPage} />
+      <CategoryList categories={categories} />
     </div>
   );
 }

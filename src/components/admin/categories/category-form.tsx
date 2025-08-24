@@ -15,7 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createCourseCategory, updateCourseCategory } from "@/api/admin/course-category";
-import { CourseCategory } from "@/types/course-category";
+import { CourseCategory } from "@/types/course";
 
 // Validation schema
 const createCategorySchema = z.object({

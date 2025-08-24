@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { API_BASE_URL } from "@/config/api";
 import { COOKIE_KEYS } from "@/config/storage";
 import { CategoryForm } from "@/components/admin/categories/category-form";
-import { CourseCategory } from "@/types/course-category";
+import { CourseCategory } from "@/types/course";
 
 interface EditCategoryPageProps {
   params: {

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2, FolderOpen } from "lucide-react";
-import { CourseCategory } from "@/types/course-category";
+import { CourseCategory } from "@/types/course";
 
 export type Props = {
   category: CourseCategory;

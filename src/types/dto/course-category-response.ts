@@ -1,5 +1,5 @@
 import { PaginatedResponse } from "@/types/dto/paginated-response";
-import { CourseCategory } from "@/types/course-category";
+import { CourseCategory } from "@/types/course";
 
 export type GetCourseCategoryResponse = PaginatedResponse<CourseCategory>;
 
