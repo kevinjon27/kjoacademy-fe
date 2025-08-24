@@ -1,6 +1,12 @@
 import { axiosClient } from "@/lib/axios.client";
-import { GetCourseCategoryRequest } from "@/types/dto/course-category-request";
-import { GetCourseCategoryResponse } from "@/types/dto/course-category-response";
+import {
+  GetCourseCategoryRequest,
+  CreateCourseCategoryRequest,
+} from "@/types/dto/course-category-request";
+import {
+  GetCourseCategoryResponse,
+  CreateCourseCategoryResponse,
+} from "@/types/dto/course-category-response";
 
 const BASE_URL = "/v1/admin/categories";
 
@@ -14,13 +20,13 @@ export const getCourseCategories = async (
 };
 
 export const getCourseCategoryBySlug = async (slug: string) => {
-  const response = await axiosClient.get(`v1/admin/course-categories/${slug}`);
+  const response = await axiosClient.get(`${BASE_URL}/${slug}`);
   return response.data;
 };
 
-export const createCourseCategory = async (data: any) => {
-  const response = await axiosClient.post(`/admin/course-categories`, data);
+export const createCourseCategory = async (
+  data: CreateCourseCategoryRequest
+): Promise<CreateCourseCategoryResponse> => {
+  const response = await axiosClient.post(BASE_URL, data);
   return response.data;
 };
-
-// export const updateCourseCategory = async (id: string, data: any) => {

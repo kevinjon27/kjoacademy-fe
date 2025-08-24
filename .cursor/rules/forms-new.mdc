@@ -1,0 +1,45 @@
+---
+description: Rules on Handling Forms
+globs:
+alwaysApply: true
+---
+
+# Handling Forms
+
+- Use the `<form />` component
+- Make sure to set the form autoComplete to off
+- If a page needs a form, separate the form as a separated component from the page. Keep the `page.tsx` as a server side component
+- The form component should obviously be a client component. Mark them with `use client`.
+- A form might be reused for creation and update purposes. Avoiding redundant form components from being made
+
+## Form State Management
+
+- Full form handling should be fully on the client side. Prefer using controlled form approach.
+- I need you to think thoroughly about the form data state. Tailor it to the specific needs of the form.
+- Don't let the form state being scattered to multiple `useState`. Use the `useReducer` approach or something more performant and elegant
+
+## Form Validation
+
+- You need to carefully think about the schema that should be applied on each field. Use `zod` to create the form validation schema.
+- The form validation should happen in real time, so the user would know if the validity of the value that currently being input by the user on the particular field. Use the `zod` schema that you've created.
+
+## APIs
+
+- Manage the API that needs to be called inside the `src/app/api`. Put the api into their respective sub directories inside (`/student` or `/admin`).
+  - The .ts file should be the name of the feature domain (course-categories, courses, modules, lessons, enrollments, .etc)
+  - Use the `axiosClient` instance because it will be used for client side API calls
+- A form might be reused for create and edit purpose
+
+## Submitting the Form
+
+- You need to create a proper form submission function
+  - Validates the given form state
+  - Returns an error message if there's validation error
+  - Calls to the particular submission API
+  - Redirection to their module index page upon successful submission
+  - Returns an error message if there's submission error
+- Call this function on the `onSubmit` prop of the form
+
+## Important Note
+
+- Avoid using NextJS route handler and server actions

@@ -35,7 +35,7 @@ export async function signInWithOtp(phone: string, otp: string) {
   if (response.data.access_token) {
     const cookieStore = await cookies();
     cookieStore.set(COOKIE_KEYS.accessToken, response.data.access_token, {
-      httpOnly: true,
+      httpOnly: false,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
