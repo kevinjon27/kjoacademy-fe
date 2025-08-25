@@ -1,4 +1,5 @@
-import { Plus, Edit, Trash2, Eye, BookOpen, Users, Clock } from "lucide-react";
+import { Plus } from "lucide-react";
+import Link from "next/link";
 import { cookies } from "next/headers";
 import { API_BASE_URL } from "@/config/api";
 import { COOKIE_KEYS } from "@/config/storage";
@@ -59,10 +60,12 @@ export default async function AdminCoursesPage(props: Props) {
             Manage all courses in your LMS
           </p>
         </div>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Course
-        </Button>
+        <Link href="/admin/courses/create">
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Course
+          </Button>
+        </Link>
       </div>
 
       <CourseList courses={courses} />

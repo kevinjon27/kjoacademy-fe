@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
@@ -14,31 +14,41 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { createCourseCategory, updateCourseCategory } from "@/api/admin/categories.api";
-import { CourseCategory } from "@/types/course";
+import { getCourseCategories } from "@/api/admin/categories.api";
+import { createCourse, updateCourse } from "@/api/admin/courses.api";
+import { CourseCategory, Course } from "@/types/course";
 
 // Validation schema
-const createCategorySchema = z.object({
+const courseSchema = z.object({
   title: z.string().min(1, "Title is required"),
+  category_id: z.string().min(1, "Category slug is required"),
   slug: z.string().min(1, "Slug is required"),
   description: z
     .string()
     .min(1, "Description is required")
     .max(1000, "Description must be at most 1000 characters"),
+  thumbnail_url: z.string().min(1, "Thumbnail URL is required"),
+  is_published: z.boolean().default(false),
 });
 
 // Form data type
 type FormData = {
   title: string;
+  category_id: string;
   slug: string;
   description: string;
+  thumbnail_url: string;
+  is_published: boolean;
 };
 
 // Form errors type
 type FormErrors = {
   title?: string;
+  category_id?: string;
   slug?: string;
   description?: string;
+  thumbnail_url?: string;
+  is_published?: boolean;
 };
 
 // Form state type
@@ -50,9 +60,9 @@ type FormState = {
 };
 
 // Form props type
-interface CategoryFormProps {
+interface CourseFormProps {
   isEdit?: boolean;
-  categoryData?: CourseCategory;
+  courseData?: Course;
 }
 
 // Form actions
@@ -64,11 +74,14 @@ type FormAction =
   | { type: "RESET" };
 
 // Initial form state
-const getInitialState = (categoryData?: CourseCategory): FormState => ({
+const getInitialState = (courseData?: Course): FormState => ({
   data: {
-    title: categoryData?.title || "",
-    slug: categoryData?.slug || "",
-    description: categoryData?.description || "",
+    title: courseData?.title || "",
+    category_id: courseData?.category.id || "",
+    slug: courseData?.slug || "",
+    description: courseData?.description || "",
+    thumbnail_url: courseData?.thumbnail_url || "",
+    is_published: courseData?.is_published || false,
   },
   errors: {},
   isSubmitting: false,
@@ -118,7 +131,7 @@ function validateField(
   value: string
 ): string | undefined {
   try {
-    createCategorySchema.shape[field].parse(value);
+    courseSchema.shape[field].parse(value);
     return undefined;
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -128,8 +141,11 @@ function validateField(
   }
 }
 
-export function CategoryForm({ isEdit = false, categoryData }: CategoryFormProps) {
-  const [state, dispatch] = useReducer(formReducer, getInitialState(categoryData));
+export function CourdseForm({ isEdit = false, courseData }: CourseFormProps) {
+  const [state, dispatch] = useReducer(
+    formReducer,
+    getInitialState(courseData)
+  );
   const router = useRouter();
 
   // Handle field changes with real-time validation
@@ -154,7 +170,7 @@ export function CategoryForm({ isEdit = false, categoryData }: CategoryFormProps
     dispatch({ type: "SET_SUBMIT_ERROR", error: null });
 
     // Validate all fields
-    const validationResult = createCategorySchema.safeParse(state.data);
+    const validationResult = courseSchema.safeParse(state.data);
     if (!validationResult.success) {
       const errors: FormErrors = {};
       validationResult.error.issues.forEach((error: z.ZodIssue) => {
@@ -168,17 +184,17 @@ export function CategoryForm({ isEdit = false, categoryData }: CategoryFormProps
     dispatch({ type: "SET_SUBMITTING", isSubmitting: true });
 
     try {
-      if (isEdit && categoryData) {
-        await updateCourseCategory(categoryData.slug, state.data);
+      if (isEdit && courseData) {
+        await updateCourse(courseSchema.slug, state.data);
       } else {
-        await createCourseCategory(state.data);
+        await createCourse(state.data);
       }
-      router.push("/admin/categories");
+      router.push("/admin/course");
       return null;
     } catch (error: any) {
       const errorMessage =
-        error.response?.data?.message || 
-        (isEdit ? "Failed to update category" : "Failed to create category");
+        error.response?.data?.message ||
+        (isEdit ? "Failed to update course" : "Failed to create course");
       dispatch({ type: "SET_SUBMIT_ERROR", error: errorMessage });
       return errorMessage;
     } finally {
@@ -189,12 +205,11 @@ export function CategoryForm({ isEdit = false, categoryData }: CategoryFormProps
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle>{isEdit ? "Edit Category" : "Create New Category"}</CardTitle>
+        <CardTitle>{isEdit ? "Edit Course" : "Create New Course"}</CardTitle>
         <CardDescription>
-          {isEdit 
-            ? "Update the course category information."
-            : "Add a new course category to organize your courses."
-          }
+          {isEdit
+            ? "Update the course information."
+            : "Add a new course to organize your courses."}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -212,7 +227,7 @@ export function CategoryForm({ isEdit = false, categoryData }: CategoryFormProps
             <Input
               id="title"
               type="text"
-              placeholder="Enter category title"
+              placeholder="Enter course title"
               className="mt-2"
               value={state.data.title}
               onChange={(e) => handleFieldChange("title", e.target.value)}
@@ -233,7 +248,7 @@ export function CategoryForm({ isEdit = false, categoryData }: CategoryFormProps
             <Input
               id="slug"
               type="text"
-              placeholder="Enter category slug"
+              placeholder="Enter course slug"
               className="mt-2"
               value={state.data.slug}
               onChange={(e) => handleFieldChange("slug", e.target.value)}
@@ -253,7 +268,7 @@ export function CategoryForm({ isEdit = false, categoryData }: CategoryFormProps
             </label>
             <Textarea
               id="description"
-              placeholder="Enter category description (max 1000 characters)"
+              placeholder="Enter course description (max 1000 characters)"
               className="mt-2"
               rows={4}
               value={state.data.description}
@@ -276,15 +291,18 @@ export function CategoryForm({ isEdit = false, categoryData }: CategoryFormProps
               disabled={state.isSubmitting}
               className="flex-1"
             >
-              {state.isSubmitting 
-                ? (isEdit ? "Updating..." : "Creating...") 
-                : (isEdit ? "Update Category" : "Create Category")
-              }
+              {state.isSubmitting
+                ? isEdit
+                  ? "Updating..."
+                  : "Creating..."
+                : isEdit
+                ? "Update Course"
+                : "Create Course"}
             </Button>
             <Button
               type="button"
               variant="outline"
-              onClick={() => router.push("/admin/categories")}
+              onClick={() => router.push("/admin/courses")}
               className="flex-1"
             >
               Cancel

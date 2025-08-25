@@ -18,6 +18,7 @@ export type Course = {
   duration_seconds: number;
   is_published: boolean;
   category: {
+    id: string;
     title: string;
     slug: string;
   };
@@ -31,6 +32,7 @@ export type CourseModule = {
   lectures_count: number;
   duration_seeconds: number;
   course: {
+    id: string;
     title: string;
     slug: string;
   };
