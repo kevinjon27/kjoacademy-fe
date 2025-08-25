@@ -1,6 +1,5 @@
 "use server";
 
-import { axiosServer } from "@/lib/axios.server";
 import { API_BASE_URL } from "@/config/api";
 import { cookies } from "next/headers";
 import { COOKIE_KEYS } from "@/config/storage";
