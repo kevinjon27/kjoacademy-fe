@@ -1,6 +1,6 @@
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { CourseDetails } from "@/components/course/course-details";
+import { CourseDetails } from "@/components/student/course/course-details";
 import { withStudentAreaProtection } from "@/guards/withAuthProtected.server";
 import { Course, CourseModule, CourseLesson } from "@/types/course";
 

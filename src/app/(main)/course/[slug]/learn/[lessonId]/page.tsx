@@ -1,13 +1,13 @@
 import dynamic from "next/dynamic";
 import { withStudentAreaProtection } from "@/guards/withAuthProtected.server";
-import CourseLessonHeader from "@/components/course/course-lesson-header";
-import CourseModulesContentSection from "@/components/course/course-modules-content-section";
+import CourseLessonHeader from "@/components/student/course/course-lesson-header";
+import CourseModulesContentSection from "@/components/student/course/course-modules-content-section";
 
 const CoursePlaybackSection = dynamic(
-  () => import("@/components/course/course-playback-section")
+  () => import("@/components/student/course/course-playback-section")
 );
 const CourseInfoSection = dynamic(
-  () => import("@/components/course/course-info-section")
+  () => import("@/components/student/course/course-info-section")
 );
 
 export type Props = {

@@ -1,4 +1,4 @@
-import LoginForm from "@/components/login/login-form";
+import LoginForm from "@/components/student/login/login-form";
 import { requestLoginOTP, signInWithOtp } from "@/actions/auth";
 
 function LoginPage() {

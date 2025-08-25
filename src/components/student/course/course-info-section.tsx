@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const CourseModulesContentSection = dynamic(
-  () => import("@/components/course/course-modules-content-section")
+  () => import("@/components/student/course/course-modules-content-section")
 );
 
 export type Props = {

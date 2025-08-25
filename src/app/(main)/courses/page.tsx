@@ -1,4 +1,4 @@
-import { CourseList } from "@/components/courses/course-list";
+import { CourseList } from "@/components/student/courses/course-list";
 import { Course } from "@/types/course";
 
 // Mock course data for demonstration
