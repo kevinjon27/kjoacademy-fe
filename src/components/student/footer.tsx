@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { InstagramIcon, TwitterIcon, YouTubeIcon } from "./icons";
+import { InstagramIcon, TwitterIcon, YouTubeIcon } from "../icons";
 
 export async function Footer() {
   const t = await getTranslations("Footer");

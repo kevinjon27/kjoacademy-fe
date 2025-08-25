@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import VideoPlayer from "@/components/video-player";
+import VideoPlayer from "@/components/shared/video-player";
 
 export type Props = {
   mediaType: "video/mp4" | "audio/mp3";

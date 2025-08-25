@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
+import { Header } from "@/components/student/header";
+import { Footer } from "@/components/student/footer";
 import { withStudentAreaProtection } from "@/guards/withAuthProtected.server";
 
 export default async function UserLayout({

@@ -8,7 +8,7 @@ import { axiosClientNext } from "@/lib/axios.client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { OtpDialog } from "@/components/otp-dialog";
+import { OtpDialog } from "@/components/shared/otp-dialog";
 
 export type OtpRequestData = {
   phone: string;

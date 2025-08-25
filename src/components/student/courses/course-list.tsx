@@ -1,6 +1,6 @@
 "use client";
 
-import { CourseCard } from "@/components/course-card";
+import { CourseCard } from "@/components/student/courses/course-card";
 import { Course } from "@/types/course";
 
 interface CourseListProps {

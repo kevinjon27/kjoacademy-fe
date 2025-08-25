@@ -2,8 +2,8 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import { getAuthData } from "@/lib/auth";
-import { LanguageChanger } from "@/components/language-changer";
-import HeaderAuthButton from "@/components/header-auth-button";
+import { LanguageChanger } from "@/components/shared/language-changer";
+import HeaderAuthButton from "@/components/student/header-auth-button";
 import { signOut } from "@/actions/auth";
 
 export async function Header() {
