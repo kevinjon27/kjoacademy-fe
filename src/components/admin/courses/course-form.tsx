@@ -141,7 +141,7 @@ function validateField(
   }
 }
 
-export function CourdseForm({ isEdit = false, courseData }: CourseFormProps) {
+export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
   const [state, dispatch] = useReducer(
     formReducer,
     getInitialState(courseData)

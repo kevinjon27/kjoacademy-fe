@@ -14,9 +14,7 @@ alwaysApply: true
 
 ## Form State Management
 
-- Full form handling should be fully on the client side. Prefer using controlled form approach.
-- I need you to think thoroughly about the form data state. Tailor it to the specific needs of the form.
-- Don't let the form state being scattered to multiple `useState`. Use the `useReducer` approach or something more performant and elegant
+- Full form handling should be fully on the client side. Manage the form elegantly with `react-hook-form` package.
 
 ## Form Validation
 
