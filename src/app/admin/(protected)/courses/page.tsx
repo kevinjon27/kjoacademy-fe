@@ -1,101 +1,52 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { CourseCard } from "@/components/admin/courses/course-card";
-import { Button } from "@/components/ui/button";
 import { Plus, Edit, Trash2, Eye, BookOpen, Users, Clock } from "lucide-react";
-import { Course } from "@/types/course";
+import { cookies } from "next/headers";
+import { API_BASE_URL } from "@/config/api";
+import { COOKIE_KEYS } from "@/config/storage";
+import { queryParams } from "@/lib/query-params";
+import { Button } from "@/components/ui/button";
+import { CourseList } from "@/components/admin/courses/course-list";
+import { GetCoursesRequest } from "@/types/dto/course-request";
+import { GetCoursesResponse } from "@/types/dto/course-response";
 
-export default function AdminCoursesPage() {
-  const courses: Course = [
-    {
-      id: 1,
-      title: "Complete React Developer Course",
-      description: "Learn React from scratch to advanced concepts",
-      category: "Web Development",
-      instructor: "John Doe",
-      students: 1250,
-      duration: "12 hours",
-      modules: 8,
-      status: "published",
-      image: "/api/placeholder/300/200",
-    },
-    {
-      id: 2,
-      title: "Advanced JavaScript Patterns",
-      description: "Master advanced JavaScript concepts and patterns",
-      category: "Web Development",
-      instructor: "Jane Smith",
-      students: 890,
-      duration: "8 hours",
-      modules: 6,
-      status: "published",
-      image: "/api/placeholder/300/200",
-    },
-    {
-      id: 3,
-      title: "iOS App Development with Swift",
-      description: "Build iOS applications using Swift and SwiftUI",
-      category: "Mobile Development",
-      instructor: "Mike Johnson",
-      students: 650,
-      duration: "15 hours",
-      modules: 10,
-      status: "draft",
-      image: "/api/placeholder/300/200",
-    },
-    {
-      id: 4,
-      title: "Data Science Fundamentals",
-      description: "Introduction to data science and machine learning",
-      category: "Data Science",
-      instructor: "Sarah Wilson",
-      students: 1100,
-      duration: "20 hours",
-      modules: 12,
-      status: "published",
-      image: "/api/placeholder/300/200",
-    },
-    {
-      id: 5,
-      title: "UI/UX Design Principles",
-      description: "Learn the fundamentals of user interface design",
-      category: "Design & UX",
-      instructor: "Alex Brown",
-      students: 750,
-      duration: "10 hours",
-      modules: 7,
-      status: "published",
-      image: "/api/placeholder/300/200",
-    },
-    {
-      id: 6,
-      title: "DevOps with Docker & Kubernetes",
-      description: "Containerization and orchestration for modern applications",
-      category: "DevOps & Cloud",
-      instructor: "David Lee",
-      students: 520,
-      duration: "18 hours",
-      modules: 9,
-      status: "draft",
-      image: "/api/placeholder/300/200",
-    },
-  ];
+async function getCourses(
+  query: GetCoursesRequest
+): Promise<GetCoursesResponse> {
+  const cookieStore = await cookies();
+  const urlSearch = queryParams(query);
+  const url = `${API_BASE_URL}/v1/admin/courses?${urlSearch.toString()}`;
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "published":
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-      case "draft":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
-      default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
-    }
-  };
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${
+        cookieStore.get(COOKIE_KEYS.accessToken)?.value
+      }`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch courses");
+  }
+
+  return response.json();
+}
+
+type Props = {
+  searchParams?: Promise<{
+    q?: string;
+    page?: string;
+    perPage?: string;
+  }>;
+};
+
+export default async function AdminCoursesPage(props: Props) {
+  const searchParams = await props.searchParams;
+  const q = searchParams?.q;
+  const page = searchParams?.page;
+  const perPage = searchParams?.perPage;
+
+  const { data: courses } = await getCourses({ q, page, perPage });
 
   return (
     <div className="space-y-6">
@@ -114,11 +65,7 @@ export default function AdminCoursesPage() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-        {courses.map((course) => (
-          <CourseCard key={course.id} course={course} />
-        ))}
-      </div>
+      <CourseList courses={courses} />
     </div>
   );
 }
