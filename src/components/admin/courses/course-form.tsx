@@ -28,7 +28,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { FormSwitch } from "@/components/shared/form-switch";
-import { FormCombobox } from "@/components/shared/form-combobox";
+import {
+  FormCombobox,
+  ComboboxOption,
+} from "@/components/shared/form-combobox";
 import { getCourseCategories } from "@/api/admin/categories.api";
 import { createCourse, updateCourse } from "@/api/admin/courses.api";
 import { CourseCategory, Course } from "@/types/course";
@@ -61,31 +64,6 @@ const courseFormSchema = z.object({
 });
 
 type CourseFormData = z.infer<typeof courseFormSchema>;
-type ComboboxOption = { value: string; label: string };
-
-function getComboboxValueLabel({
-  selectedOption,
-  options,
-  emptyPlaceholder = "Select Item",
-}: {
-  selectedOption: ComboboxOption | undefined;
-  options: ComboboxOption[];
-  emptyPlaceholder?: string;
-}): string {
-  if (!selectedOption) {
-    return emptyPlaceholder;
-  }
-  if (options.length) {
-    const option = options.find(
-      (option) => option.value === selectedOption.value
-    );
-    if (option) {
-      return option.label;
-    }
-  }
-
-  return selectedOption.label;
-}
 
 // Form props type
 interface CourseFormProps {
