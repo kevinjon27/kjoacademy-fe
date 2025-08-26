@@ -6,18 +6,19 @@ import {
   UpdateCourseRequest,
 } from "@/types/dto/course-request";
 import {
-  GetCourseResponse,
+  GetCoursesResponse,
   GetCoursesByCategorySlugResponse,
   GetCourseBySlugResponse,
   CreateCourseResponse,
   UpdateCourseResponse,
+  DeleteCourseResponse,
 } from "@/types/dto/course-response";
 
 const BASE_URL = "/v1/admin/courses";
 
 export const getCourses = async (
   params: GetCoursesRequest
-): Promise<GetCourseResponse> => {
+): Promise<GetCoursesResponse> => {
   const response = await axiosClient.get(BASE_URL, {
     params: params || {},
   });
@@ -53,5 +54,12 @@ export const updateCourse = async (
   data: UpdateCourseRequest
 ): Promise<UpdateCourseResponse> => {
   const response = await axiosClient.put(`${BASE_URL}/${slug}`, data);
+  return response.data;
+};
+
+export const deleteCourse = async (
+  slug: string
+): Promise<DeleteCourseResponse> => {
+  const response = await axiosClient.delete(`${BASE_URL}/${slug}`);
   return response.data;
 };

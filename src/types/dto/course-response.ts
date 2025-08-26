@@ -23,3 +23,7 @@ export type UpdateCourseResponse = {
   message: string;
   data: Course;
 };
+
+export type DeleteCourseResponse = {
+  message: string;
+};

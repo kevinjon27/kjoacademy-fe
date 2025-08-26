@@ -6,11 +6,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { humanizeDuration } from "@/lib/time";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, Eye, BookOpen, Users, Clock } from "lucide-react";
+import { Edit, Trash2, BookOpen, Users, Clock } from "lucide-react";
 import { Course } from "@/types/course";
 
-export function CourseCard({ course }: { course: Course }) {
+export type Props = {
+  course: Course;
+  onDeleteClick: (course: Course) => void;
+};
+
+export function CourseCard({ course, onDeleteClick }: Props) {
   return (
     <Card key={course.id} className="hover:shadow-lg transition-shadow">
       <CardHeader>
@@ -29,9 +35,6 @@ export function CourseCard({ course }: { course: Course }) {
             </div>
           </div>
           <div className="flex items-center space-x-1">
-            <Button variant="ghost" size="sm">
-              <Eye className="h-4 w-4" />
-            </Button>
             <Link href={`/admin/courses/${course.slug}/edit`}>
               <Button variant="ghost" size="sm">
                 <Edit className="h-4 w-4" />
@@ -41,6 +44,7 @@ export function CourseCard({ course }: { course: Course }) {
               variant="ghost"
               size="sm"
               className="text-red-600 hover:text-red-700"
+              onClick={() => onDeleteClick(course)}
             >
               <Trash2 className="h-4 w-4" />
             </Button>
@@ -68,7 +72,7 @@ export function CourseCard({ course }: { course: Course }) {
             <div className="flex items-center space-x-1">
               <Clock className="h-4 w-4 text-gray-400" />
               <span className="font-medium text-gray-900 dark:text-white">
-                {course.duration_seconds}
+                {humanizeDuration(course.duration_seconds)}
               </span>
             </div>
           </div>
