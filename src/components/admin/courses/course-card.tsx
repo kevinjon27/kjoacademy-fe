@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { humanizeDuration } from "@/lib/time";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2, BookOpen, Users, Clock } from "lucide-react";
 import { Course } from "@/types/course";
@@ -22,9 +23,9 @@ export function CourseCard({ course, onDeleteClick }: Props) {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="p-2 rounded-lg bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+            {/* <div className="p-2 rounded-lg bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
               <BookOpen className="h-5 w-5" />
-            </div>
+            </div> */}
             <div>
               <CardTitle className="text-lg line-clamp-1">
                 {course.title}
@@ -85,6 +86,15 @@ export function CourseCard({ course, onDeleteClick }: Props) {
           </div>
 
           <div className="flex items-center justify-between">
+            <Badge
+              className={
+                course.is_published
+                  ? "bg-success-500 text-primary-foreground"
+                  : "bg-muted text-muted-foreground"
+              }
+            >
+              {course.is_published ? "Published" : "Not Published"}
+            </Badge>
             <Button variant="outline" size="sm">
               Manage
             </Button>
