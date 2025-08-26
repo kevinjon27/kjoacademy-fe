@@ -1,13 +1,22 @@
 "use client";
 
-import { useState, useMemo, ChangeEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useMemo, ChangeEvent, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { debounce } from "es-toolkit";
-import { useForm, ControllerRenderProps } from "react-hook-form";
+import {
+  useForm,
+  ControllerRenderProps,
+  FieldValues,
+  Path,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Check, ChevronsUpDown, SearchIcon } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { categoriesQueryKey } from "@/lib/query-key/categories";
 import { cn } from "@/lib/utils";
+import { getQueryClient } from "@/lib/get-query-client";
+import { coursesQueryKey } from "@/lib/query-key/courses";
 import {
   Form,
   FormControl,
@@ -19,7 +28,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import {
   Card,
   CardContent,
@@ -29,9 +37,9 @@ import {
 } from "@/components/ui/card";
 import {
   Command,
+  CommandInput,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
@@ -74,6 +82,31 @@ const courseFormSchema = z.object({
 });
 
 type CourseFormData = z.infer<typeof courseFormSchema>;
+type ComboboxOption = { value: string; label: string };
+
+function getComboboxValueLabel({
+  selectedOption,
+  options,
+  emptyPlaceholder = "Select Item",
+}: {
+  selectedOption: ComboboxOption | undefined;
+  options: ComboboxOption[];
+  emptyPlaceholder?: string;
+}): string {
+  if (!selectedOption) {
+    return emptyPlaceholder;
+  }
+  if (options.length) {
+    const option = options.find(
+      (option) => option.value === selectedOption.value
+    );
+    if (option) {
+      return option.label;
+    }
+  }
+
+  return selectedOption.label;
+}
 
 // Form props type
 interface CourseFormProps {
@@ -83,29 +116,117 @@ interface CourseFormProps {
 
 export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
   const router = useRouter();
+  const params = useParams();
+  const { slug: routeSlug = "" } = params;
+  const [searchCategory, setSearchCategory] = useState("");
+  const [categoryOptions, setCategoryOptions] = useState<ComboboxOption[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<
+    ComboboxOption | undefined
+  >(undefined);
 
-  const [categoryOptions, setCategoryOptions] = useState<
-    { value: string; label: string }[]
-  >([]);
+  // query to search categories
+  const { data: categories } = useQuery({
+    queryKey: categoriesQueryKey.list({
+      q: searchCategory,
+    }),
+    queryFn: async (): Promise<CourseCategory[]> => {
+      const response = await getCourseCategories({
+        q: searchCategory,
+      });
+      return response.data;
+    },
+    staleTime: 5 * 1000, // 3 seconds
+  });
 
-  async function onSearchCategory(
-    evt: ChangeEvent<HTMLInputElement>
-  ): Promise<void> {
+  // mutation to create or update the course
+  const { mutateAsync: createCourseMutation } = useMutation({
+    mutationFn: async (data: CreateCourseRequest) => {
+      return await createCourse(data as CreateCourseRequest);
+    },
+    onSuccess: () => {
+      const queryClient = getQueryClient();
+      queryClient.invalidateQueries({
+        queryKey: coursesQueryKey.lists(),
+      });
+      router.push("/admin/courses");
+    },
+    onError: (error) => {
+      const errorMessage =
+        (error as any)?.response?.data?.message || "Failed to create course";
+      // Set a general form error
+      setError("root", {
+        type: "manual",
+        message: errorMessage,
+      });
+    },
+  });
+
+  const { mutateAsync: updateCourseMutation } = useMutation({
+    mutationFn: async (data: UpdateCourseRequest) => {
+      return await updateCourse(
+        routeSlug as string,
+        data as UpdateCourseRequest
+      );
+    },
+    onSuccess: () => {
+      const queryClient = getQueryClient();
+      queryClient.invalidateQueries({
+        queryKey: coursesQueryKey.detail(routeSlug as string),
+      });
+      queryClient.invalidateQueries({
+        queryKey: coursesQueryKey.all,
+      });
+      router.push("/admin/courses");
+    },
+    onError: (error) => {
+      const errorMessage =
+        (error as any)?.response?.data?.message || "Failed to update course";
+      // Set a general form error
+      setError("root", {
+        type: "manual",
+        message: errorMessage,
+      });
+    },
+  });
+
+  /**
+   * Happens only in edit mode
+   * Populate the category combobox with the category of the course
+   * Set the form values to the course data
+   */
+  useEffect(() => {
+    if (courseData) {
+      setSelectedCategory({
+        value: courseData.category.id,
+        label: courseData.category.title,
+      });
+      form.reset(courseData);
+      form.setValue("category_id", courseData.category.id);
+    }
+  }, [courseData]);
+
+  useEffect(() => {
+    if (categories?.length) {
+      setCategoryOptions(
+        categories.map((category) => ({
+          value: category.id,
+          label: category.title,
+        }))
+      );
+    } else {
+      setCategoryOptions([]);
+    }
+  }, [categories]);
+
+  const handleSearchCategory = (evt: ChangeEvent<HTMLInputElement>) => {
     const target = evt.target as HTMLInputElement;
-    const q = target.value;
-
-    const response = await getCourseCategories({
-      q: q || "",
-      perPage: 10,
-    });
-    const options = response.data.map((category: CourseCategory) => ({
-      value: category.id,
-      label: category.title,
-    }));
-
-    setCategoryOptions(options);
-  }
-  const debouncedOnSearch = useMemo(() => debounce(onSearchCategory, 800), []);
+    const value = target.value || "";
+    setSearchCategory(value);
+  };
+  const debouncedOnSearchCategory = useMemo(
+    () => debounce(handleSearchCategory, 800),
+    []
+  );
 
   const form = useForm<CourseFormData>({
     resolver: zodResolver(courseFormSchema),
@@ -128,23 +249,10 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
 
   // Form submission function
   const onSubmit = async (data: CourseFormData) => {
-    try {
-      if (isEdit && courseData) {
-        await updateCourse(courseData.slug, data as UpdateCourseRequest);
-      } else {
-        await createCourse(data as CreateCourseRequest);
-      }
-      router.push("/admin/courses");
-    } catch (error: unknown) {
-      const errorMessage =
-        (error as any)?.response?.data?.message ||
-        (isEdit ? "Failed to update course" : "Failed to create course");
-
-      // Set a general form error
-      setError("root", {
-        type: "manual",
-        message: errorMessage,
-      });
+    if (isEdit && courseData) {
+      await updateCourseMutation(data as UpdateCourseRequest);
+    } else {
+      await createCourseMutation(data as CreateCourseRequest);
     }
   };
 
@@ -191,22 +299,21 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
                             !field.value && "text-muted-foreground"
                           )}
                         >
-                          {field.value
-                            ? categoryOptions.find(
-                                (category) => category.value === field.value
-                              )?.label
-                            : "Select Category"}
+                          {getComboboxValueLabel({
+                            selectedOption: selectedCategory,
+                            options: categoryOptions,
+                            emptyPlaceholder: "Select Category",
+                          })}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[480px]">
+                    <PopoverContent className="w-[480px] p-0">
                       <Command>
-                        <Input
-                          type="text"
+                        <CommandInput
+                          className="h-9 focus:outline-none flex-1"
                           placeholder="Search Category"
-                          className="h-9 focus:outline-none flex-1 mb-2"
-                          onChange={debouncedOnSearch}
+                          onInput={debouncedOnSearchCategory}
                         />
                         <CommandList>
                           <CommandEmpty>No category found.</CommandEmpty>
@@ -217,6 +324,7 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
                                 key={`ci-cat-${category.value}`}
                                 onSelect={() => {
                                   form.setValue("category_id", category.value);
+                                  setSelectedCategory(category);
                                 }}
                               >
                                 {category.label}

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -31,9 +32,11 @@ export function CourseCard({ course }: { course: Course }) {
             <Button variant="ghost" size="sm">
               <Eye className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="sm">
-              <Edit className="h-4 w-4" />
-            </Button>
+            <Link href={`/admin/courses/${course.slug}/edit`}>
+              <Button variant="ghost" size="sm">
+                <Edit className="h-4 w-4" />
+              </Button>
+            </Link>
             <Button
               variant="ghost"
               size="sm"

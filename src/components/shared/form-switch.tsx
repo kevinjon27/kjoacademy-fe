@@ -38,7 +38,7 @@ export function FormSwitch<T extends FieldValues>(props: Props<T>) {
               aria-readonly={props.disabled}
             />
           </FormControl>
-          <FormMessage id={props.id} />
+          <FormMessage id={`${props.id}-error`} />
         </FormItem>
       )}
     />
