@@ -1,3 +1,7 @@
+/**
+ * Important!
+ * This component should be used in conjunction with the react-hook-form <Form /> component.
+ */
 import {
   Control,
   ControllerRenderProps,
@@ -10,6 +14,7 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 
@@ -30,6 +35,9 @@ export function FormSwitch<T extends FieldValues>(props: Props<T>) {
       render={({ field }: { field: ControllerRenderProps<T, Path<T>> }) => (
         <FormItem>
           <FormLabel>{props.label}</FormLabel>
+          {props.description && (
+            <FormDescription>{props.description}</FormDescription>
+          )}
           <FormControl>
             <Switch
               checked={field.value}

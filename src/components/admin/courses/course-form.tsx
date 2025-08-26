@@ -1,20 +1,12 @@
 "use client";
 
-import { useState, useMemo, ChangeEvent, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { debounce } from "es-toolkit";
-import {
-  useForm,
-  ControllerRenderProps,
-  FieldValues,
-  Path,
-} from "react-hook-form";
+import { useForm, ControllerRenderProps } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Check, ChevronsUpDown } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { categoriesQueryKey } from "@/lib/query-key/categories";
-import { cn } from "@/lib/utils";
 import { getQueryClient } from "@/lib/get-query-client";
 import { coursesQueryKey } from "@/lib/query-key/courses";
 import {
@@ -35,21 +27,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Command,
-  CommandInput,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { FormSwitch } from "@/components/shared/form-switch";
-
+import { FormCombobox } from "@/components/shared/form-combobox";
 import { getCourseCategories } from "@/api/admin/categories.api";
 import { createCourse, updateCourse } from "@/api/admin/courses.api";
 import { CourseCategory, Course } from "@/types/course";
@@ -218,16 +197,6 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
     }
   }, [categories]);
 
-  const handleSearchCategory = (evt: ChangeEvent<HTMLInputElement>) => {
-    const target = evt.target as HTMLInputElement;
-    const value = target.value || "";
-    setSearchCategory(value);
-  };
-  const debouncedOnSearchCategory = useMemo(
-    () => debounce(handleSearchCategory, 800),
-    []
-  );
-
   const form = useForm<CourseFormData>({
     resolver: zodResolver(courseFormSchema),
     defaultValues: {
@@ -278,74 +247,14 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
               </div>
             )}
 
-            <FormField
-              control={form.control}
+            <FormCombobox
+              form={form}
               name="category_id"
-              render={({
-                field,
-              }: {
-                field: ControllerRenderProps<CourseFormData, "category_id">;
-              }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Course Category</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            "w-full justify-between",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {getComboboxValueLabel({
-                            selectedOption: selectedCategory,
-                            options: categoryOptions,
-                            emptyPlaceholder: "Select Category",
-                          })}
-                          <ChevronsUpDown className="opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[480px] p-0">
-                      <Command>
-                        <CommandInput
-                          className="h-9 focus:outline-none flex-1"
-                          placeholder="Search Category"
-                          onInput={debouncedOnSearchCategory}
-                        />
-                        <CommandList>
-                          <CommandEmpty>No category found.</CommandEmpty>
-                          <CommandGroup>
-                            {categoryOptions.map((category) => (
-                              <CommandItem
-                                value={category.label}
-                                key={`ci-cat-${category.value}`}
-                                onSelect={() => {
-                                  form.setValue("category_id", category.value);
-                                  setSelectedCategory(category);
-                                }}
-                              >
-                                {category.label}
-                                <Check
-                                  className={cn(
-                                    "ml-auto",
-                                    category.value === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage id="title-error" />
-                </FormItem>
-              )}
+              id="category_id"
+              label="Course Category"
+              options={categoryOptions}
+              defaultOption={selectedCategory}
+              onSearch={setSearchCategory}
             />
 
             <FormField
@@ -467,6 +376,7 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
               <Button
                 type="button"
                 variant="outline"
+                disabled={isSubmitting}
                 onClick={() => router.push("/admin/courses")}
                 className="flex-1"
               >
