@@ -1,9 +1,9 @@
 export type PaginatedResponse<T> = {
-  current_page: number;
   data: T[];
-  from: number;
+  current_page: number;
   per_page: number;
-  last_page: number;
-  to: number;
   total: number;
+  last_page: number;
+  from: number;
+  to: number;
 };

@@ -29,25 +29,31 @@ export type CourseModule = {
   id: string;
   course_id: string;
   title: string;
-  lectures_count: number;
-  duration_seeconds: number;
+  order: number;
+  lessons_count: number;
+  duration_seconds: number;
+  is_published: boolean;
   course: {
     id: string;
     title: string;
     slug: string;
   };
-  lessons_count: number;
+  created_at: string;
+  updated_at: string;
 };
 
 export type CourseLesson = {
   id: string;
-  course_module_id: string;
   title: string;
-  media_url: string;
-  media_type: "video/mp4" | "image/png" | "audio/mpeg";
+  order: number;
+  lesson_type: "video/mp4" | "image/png" | "audio/mpeg";
+  lesson_content_url: string;
   duration_seconds: number;
+  is_published: boolean;
   module: {
     id: string;
     title: string;
   };
+  created_at: string;
+  updated_at: string;
 };

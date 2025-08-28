@@ -6,9 +6,9 @@ import { CategoryForm } from "@/components/admin/categories/category-form";
 import { CourseCategory } from "@/types/course";
 
 interface EditCategoryPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 async function getCategoryData(slug: string): Promise<CourseCategory | null> {
@@ -44,7 +44,8 @@ async function getCategoryData(slug: string): Promise<CourseCategory | null> {
 export default async function EditCategoryPage({
   params,
 }: EditCategoryPageProps) {
-  const categoryData = await getCategoryData(params.slug);
+  const { slug } = await params;
+  const categoryData = await getCategoryData(slug);
 
   if (!categoryData) {
     notFound();
