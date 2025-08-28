@@ -6,9 +6,10 @@ import { CourseLesson, CourseLessonTypes } from "@/types/course";
 
 export type Props = {
   lesson: CourseLesson;
+  onDeleteClick: (module: CourseLesson) => void;
 };
 
-export function LessonCard({ lesson }: Props) {
+export function LessonCard({ lesson, onDeleteClick }: Props) {
   const getStatusColor = (isPublished: boolean) => {
     if (isPublished) {
       return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
@@ -42,15 +43,13 @@ export function LessonCard({ lesson }: Props) {
           </div>
           <div className="flex items-center space-x-1">
             <Button variant="ghost" size="sm">
-              <Eye className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
               <Edit className="h-4 w-4" />
             </Button>
             <Button
               variant="ghost"
               size="sm"
               className="text-red-600 hover:text-red-700"
+              onClick={() => onDeleteClick(lesson)}
             >
               <Trash2 className="h-4 w-4" />
             </Button>

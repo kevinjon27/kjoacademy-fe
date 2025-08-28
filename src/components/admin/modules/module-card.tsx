@@ -1,12 +1,4 @@
-import {
-  Plus,
-  Edit,
-  Trash2,
-  Eye,
-  Layers,
-  Clock,
-  FileText,
-} from "lucide-react";
+import { Edit, Trash2, Layers, Clock, FileText } from "lucide-react";
 import { humanizeDuration } from "@/lib/time";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,9 +6,10 @@ import { CourseModule } from "@/types/course";
 
 export type Props = {
   module: CourseModule;
+  onDeleteClick: (module: CourseModule) => void;
 };
 
-export function ModuleCard({ module }: Props) {
+export function ModuleCard({ module, onDeleteClick }: Props) {
   const getStatusColor = (isPublished: boolean) => {
     if (isPublished) {
       return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
@@ -41,15 +34,13 @@ export function ModuleCard({ module }: Props) {
           </div>
           <div className="flex items-center space-x-1">
             <Button variant="ghost" size="sm">
-              <Eye className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
               <Edit className="h-4 w-4" />
             </Button>
             <Button
               variant="ghost"
               size="sm"
               className="text-red-600 hover:text-red-700"
+              onClick={() => onDeleteClick(module)}
             >
               <Trash2 className="h-4 w-4" />
             </Button>
