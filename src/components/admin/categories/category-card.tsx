@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, FolderOpen } from "lucide-react";
+import { Edit, FolderOpen } from "lucide-react";
 import { CourseCategory } from "@/types/course";
 
 export type Props = {
@@ -33,13 +33,6 @@ export function CategoryCard({ category, ...rest }: Props) {
                 <Edit className="h-4 w-4" />
               </Button>
             </Link>
-            {/* <Button
-              variant="ghost"
-              size="sm"
-              className="text-red-600 hover:text-red-700"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button> */}
           </div>
         </div>
       </CardHeader>
@@ -59,5 +52,3 @@ export function CategoryCard({ category, ...rest }: Props) {
     </Card>
   );
 }
-
-export default CategoryCard;

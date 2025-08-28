@@ -98,7 +98,7 @@ export default function AdminLessonsPage() {
         </div>
       </div>
 
-      {/* Modal Delete Module */}
+      {/* Modal Delete Lesson */}
       <ImportantDialog
         open={dialogDelete.open}
         onCancel={onDeleteCancel}

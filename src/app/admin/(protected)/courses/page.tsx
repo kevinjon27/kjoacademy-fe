@@ -1,9 +1,27 @@
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
+import { coursesQueryKey } from "@/lib/query-key/courses";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { CourseList } from "@/components/admin/courses/course-list";
+import { CourseCard } from "@/components/admin/courses/course-card";
+import { getCourses } from "@/api/admin/courses.api";
 
 export default function AdminCoursesPage() {
+  const {
+    data: courses = [],
+    isLoading: isLoadingCourses,
+    refetch: refetchCourses,
+  } = useQuery({
+    queryKey: coursesQueryKey.all,
+    queryFn: async () => {
+      const result = await getCourses({});
+      return result.data;
+    },
+    staleTime: 5 * 1000, // 5 seconds
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -22,7 +40,20 @@ export default function AdminCoursesPage() {
           </Button>
         </Link>
       </div>
-      <CourseList />
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        {isLoadingCourses ? (
+          <div>Loading...</div>
+        ) : (
+          courses.map((course) => (
+            <CourseCard
+              key={`course-card-${course.id}`}
+              course={course}
+              onDeleteClick={() => {}}
+            />
+          ))
+        )}
+      </div>
     </div>
   );
 }

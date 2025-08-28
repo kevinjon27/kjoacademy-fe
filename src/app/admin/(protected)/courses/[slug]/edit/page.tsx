@@ -11,7 +11,7 @@ import { Course } from "@/types/course";
 export default function EditCoursePage() {
   const { slug } = useParams();
 
-  const { data: course } = useQuery({
+  const { data: course, isLoading: isCourseLoading } = useQuery({
     queryKey: coursesQueryKey.detail(slug as string),
     queryFn: async (): Promise<Course> => {
       const response = await getCourseBySlug(slug as string);
@@ -26,9 +26,11 @@ export default function EditCoursePage() {
         <p className="text-gray-600 mt-2">Edit your course.</p>
       </div>
 
-      <Suspense fallback={<div>Loading...</div>}>
+      {isCourseLoading ? (
+        <div>Loading...</div>
+      ) : (
         <CourseForm isEdit={true} courseData={course} />
-      </Suspense>
+      )}
     </div>
   );
 }

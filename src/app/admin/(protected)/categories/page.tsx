@@ -1,53 +1,21 @@
+"use client";
+
 import { Plus } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { categoriesQueryKey } from "@/lib/query-key/categories";
 import Link from "next/link";
-import { cookies } from "next/headers";
-import { COOKIE_KEYS } from "@/config/storage";
-import { API_BASE_URL } from "@/config/api";
-import { queryParams } from "@/lib/query-params";
 import { Button } from "@/components/ui/button";
-import CategoryList from "@/components/admin/categories/category-list";
-import { GetCourseCategoryRequest } from "@/types/dto/course-category-request";
-import { GetCourseCategoryResponse } from "@/types/dto/course-category-response";
+import { CategoryCard } from "@/components/admin/categories/category-card";
+import { getCourseCategories } from "@/api/admin/categories.api";
 
-async function getCourseCategories(
-  query: GetCourseCategoryRequest
-): Promise<GetCourseCategoryResponse> {
-  const cookieStore = await cookies();
-  const urlSearch = queryParams(query);
-  const url = `${API_BASE_URL}/v1/admin/categories?${urlSearch.toString()}`;
-
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${
-        cookieStore.get(COOKIE_KEYS.accessToken)?.value
-      }`,
+export default function AdminCategoriesPage() {
+  const { data: categories = [], isLoading: isCategoriesLoading } = useQuery({
+    queryKey: categoriesQueryKey.all,
+    queryFn: async () => {
+      const result = await getCourseCategories({});
+      return result.data;
     },
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch course categories");
-  }
-
-  return response.json();
-}
-
-type Props = {
-  searchParams?: Promise<{
-    q?: string;
-    page?: string;
-    perPage?: string;
-  }>;
-};
-
-export default async function AdminCategoriesPage(props: Props) {
-  const searchParams = await props.searchParams;
-  const q = searchParams?.q;
-  const page = searchParams?.page;
-  const perPage = searchParams?.perPage;
-
-  const { data: categories } = await getCourseCategories({ q, page, perPage });
 
   return (
     <div className="space-y-6">
@@ -68,7 +36,18 @@ export default async function AdminCategoriesPage(props: Props) {
         </Link>
       </div>
 
-      <CategoryList categories={categories} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {isCategoriesLoading ? (
+          <div>Loading...</div>
+        ) : (
+          categories.map((category) => (
+            <CategoryCard
+              key={`cat-${category.slug}-${category.id}`}
+              category={category}
+            />
+          ))
+        )}
+      </div>
     </div>
   );
 }
