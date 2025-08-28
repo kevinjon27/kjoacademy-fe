@@ -4,14 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import { modulesQueryKey } from "@/lib/query-key/modules";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { ModuleList } from "@/components/admin/modules/module-list";
+import { ModuleCard } from "@/components/admin/modules/module-card";
 import { getModules } from "@/api/admin/modules.api";
 
 export default function AdminModulesPage() {
-  const {
-    data: modules = [],
-    isLoading: isModulesLoading,
-  } = useQuery({
+  const { data: modules = [], isLoading: isModulesLoading } = useQuery({
     queryKey: modulesQueryKey.all,
     queryFn: async () => {
       const result = await getModules({});
@@ -36,11 +33,15 @@ export default function AdminModulesPage() {
         </Button>
       </div>
 
-      {isModulesLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <ModuleList modules={modules} />
-      )}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {isModulesLoading ? (
+          <div>Loading...</div>
+        ) : (
+          modules.map((module) => (
+            <ModuleCard key={`mod-card-${module.id}`} module={module} />
+          ))
+        )}
+      </div>
     </div>
   );
 }

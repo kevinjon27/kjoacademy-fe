@@ -57,3 +57,8 @@ export type CourseLesson = {
   created_at: string;
   updated_at: string;
 };
+
+export enum CourseLessonTypes {
+  VIDEO = "video/mp4",
+  AUDIO = "audio/mp3",
+}
