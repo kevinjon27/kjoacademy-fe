@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   Card,
@@ -23,9 +25,6 @@ export function CourseCard({ course, onDeleteClick }: Props) {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            {/* <div className="p-2 rounded-lg bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-              <BookOpen className="h-5 w-5" />
-            </div> */}
             <div>
               <CardTitle className="text-lg line-clamp-1">
                 {course.title}

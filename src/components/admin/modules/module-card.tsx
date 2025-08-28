@@ -1,3 +1,5 @@
+"use client";
+
 import { Edit, Trash2, Layers, Clock, FileText } from "lucide-react";
 import { humanizeDuration } from "@/lib/time";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
