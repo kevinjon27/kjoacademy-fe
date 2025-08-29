@@ -1,8 +1,0 @@
----
-description: Apply i18n with next-intl library
-alwaysApply: true
----
-
-# I18n for components
-
-- Do not forget to apply i18n with the `next-intl` into any server and client component
