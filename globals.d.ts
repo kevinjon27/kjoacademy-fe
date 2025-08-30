@@ -1,5 +1,5 @@
 import { formats } from "@/i18n/request";
-import messages from "./src/messages/en";
+import messages from "./src/i18n/messages/en";
 
 declare module "next-intl" {
   interface AppConfig {

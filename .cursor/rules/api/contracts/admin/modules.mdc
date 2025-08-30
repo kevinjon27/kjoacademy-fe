@@ -1,0 +1,192 @@
+---
+alwaysApply: false
+---
+
+# Admin Course Modules API Contracts
+
+BASE_URL: `${API_BASE_URL}/v1/admin/modules`
+
+## GET Many Modules
+
+- `GET BASE_URL`
+  - Get many course modules data
+  - Each course module returned should have `txt:responseBody` shape
+  - Note for backend:
+    - Make sure to use laravel `paginate` to return the list of the `txt:responseBody`
+
+```txt:requestQuery
+{
+  q?: string; // search query
+  perPage?: string; // how many items per page
+  page?: string;  // current page
+}
+```
+
+```txt:responseBody
+{
+  id: string;
+  course_id: string;
+  title: string;
+  order: number;
+  lessons_count: number;
+  duration_seconds: number;
+  is_published: boolean;
+  course: {
+    title: string;
+    slug: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+```
+
+## POST Create Module
+
+- `POST BASE_URL`
+  - Create new course module
+  - The returned course module should have `txt:responseBody` shape
+
+```txt:requestBody
+{
+  course_id: string;
+  title: string;
+  is_published: boolean;
+}
+```
+
+```txt:responseBody
+{
+  id: string;
+  course_id: string;
+  title: string;
+  order: number;
+  lessons_count: number;
+  duration_seconds: number;
+  is_published: boolean;
+  course: {
+    title: string;
+    slug: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+```
+
+<!-- ## GET Modules By Course Slug
+
+- `GET BASE_URL/courses/{$slug}/modules`
+  - Get course modules data from a specific course by course slug.
+  - Each course module returned should have `txt:responseBody` shape
+  - Note for backend:
+    - Make sure to use laravel `paginate` to return the list of the `txt:responseBody`
+
+```txt:requestParam
+slug: string // course slug
+````
+
+```txt:requestQuery
+{
+  q?: string; // search query
+  perPage?: string; // how many items per page
+  page?: string;  // current page
+}
+```
+
+```txt:responseBody
+{
+  id: string;
+  course_id: string;
+  title: string;
+  order: number;
+  lessons_count: number;
+  duration_seconds: number;
+  is_published: boolean;
+  course: {
+    title: string;
+    slug: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+``` -->
+
+## GET Course Module By ID
+
+- `GET BASE_URL/{id}`
+  - Get course module data by id
+  - The returned course module should have `txt:responseBody` shape
+
+```txt:requestParam
+id: string; // id of the module
+```
+
+```txt:responseBody
+{
+  id: string;
+  course_id: string;
+  title: string;
+  order: number;
+  lessons_count: number;
+  duration_seconds: number;
+  is_published: boolean;
+  course: {
+    title: string;
+    slug: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+```
+
+## PUT Update Course Module
+
+- `PUT BASE_URL/{id}`
+  - Update course module data
+  - Could be used to publish/unpublish course modules too
+  - The returned course module should have `txt:responseBody` shape
+
+```txt:requestParam
+id: string; // id of the module
+```
+
+```txt:requestBody
+{
+  course_id: string;
+  title: string;
+  is_published: boolean;
+}
+```
+
+```txt:responseBody
+{
+  id: string;
+  course_id: string;
+  title: string;
+  order: number;
+  lessons_count: number;
+  duration_seconds: number;
+  is_published: boolean;
+  course: {
+    title: string;
+    slug: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+```
+
+## DELETE Delete Course Module
+
+- `DELETE BASE_URL/{id}`
+  - Delete course module data (Soft Delete)
+  - The returned data should have `txt:responseBody` shape
+
+```txt:requestParam
+id: string; // id of the module
+```
+
+```txt:responseBody
+{
+  message: string
+}
+```

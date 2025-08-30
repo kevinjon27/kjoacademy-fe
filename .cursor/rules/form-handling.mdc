@@ -1,0 +1,38 @@
+---
+description: Rules on Handling Forms
+globs:
+alwaysApply: true
+---
+
+# Handling Forms
+
+- Use the `<Form />` component from the `@/components/ui/form`.
+  - Take `@/components/admin/courses/course-form.tsx` as an example for the form structure
+- Make sure to set the form autoComplete to off
+- If a page needs a form, separate the form as a separated component from the page. Keep the `page.tsx` as a server side component. Put the form component within the `@/components` directory.
+- The form component should obviously be a client component. Mark them with `use client`.
+- A form might be reused for creation and update purposes, avoiding redundant form components from being made.
+
+## Form State Management
+
+- Full form handling should be fully on the client side. Manage the form elegantly with `react-hook-form` package.
+
+## Form Validation
+
+- You need to carefully think about the schema that should be applied on each field. Use `zod` to create the form validation schema.
+- The form validation should happen in real time, so the user would know if the validity of the value that currently being input by the user on the particular field. Use the `zod` schema that you've created.
+
+## Form Submission
+
+- A form might be reused for create and edit purpose
+- Create necessary mutation functions (create or update) using the `useMutation` from `@tanstack/react-query`.
+  - Extract `mutationAsync` and `isPending` properties from the `useMutation` invocations. Don't forget to alias them because there might be more than one `useMutation` invocations.
+  - Import the necessary APIs from `@/api/admin` directory.
+  - Adhere to the rules that are already mentioned in the `.cursor/rules/main.mdc`. Particularly the `Doing the API calls (queries and mutations)` section
+- Create an `onSubmit` function that wraps the `mutationAsync` invocation
+- Invoke the `onSubmit` function using the `handleSubmit` that is extracted from the `useForm`.
+- Returns an error message if there's submission error
+
+## Important Note
+
+- Avoid using NextJS route handler and server actions

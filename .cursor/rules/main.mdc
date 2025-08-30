@@ -1,0 +1,156 @@
+---
+description: Main Project Rules
+globs:
+alwaysApply: true
+---
+
+# Our App Overview
+
+- We are building an LMS (Learning Management System) App
+- This is the Frontend project of our app
+- We will have a user-facing site where user could browse courses, enroll, learn on a course, and track their course progress.
+- We will also have an admin-facing site to manage course categories, courses, course modules, lessons, students, and users.
+
+## This project uses
+
+You need to know that this project uses:
+
+- NextJS 15.4.6
+- typescript ^5
+- pnpm 10.14.0
+- tailwindcss ^4 for the CSS utility classes
+- shadcn to manage our ui components
+- @tanstack/react-query^5.85.5 to manage API calls (queries, mutations, actions, caching).
+
+IMPORTANT:
+
+- See the `mise.toml` file to see the exact version of node that should be used in the terminal.
+- Use `pnpm` to manage our packages and execute commands like shadcn component generation commands.
+
+## Auth
+
+- The admin and student facing sites are both using OTP challenge for login flow.
+- This app uses a single-session approach so it is expected that any user could only be logged in only on one device (user's other devices will be logged out).
+
+## Feature Domains
+
+### Admin
+
+- Overview
+- Course Category Management
+- Course Management
+- Course Module Management
+- Course Lesson Management
+- Student Management
+- User Management
+
+### Student
+
+- Courses List
+  - Base route: `/courses`
+- Course Details
+  - Base course: `/courses`
+- Course Lesson (video playback)
+- My Courses
+- User Profile
+
+## Code Style
+
+- Use TypeScript for all new files
+  - Use `.tsx` extension for components
+  - Use `.ts` for anything else (utils, types file)
+- Prefer functional components in React
+  - Prefer default export when creating a new app segment `layout.tsx` and `page.tsx`.
+  - Prefer named export when creating other type of components
+- Prefer hyphenated naming style for component names. Example: `some-component.tsx`
+
+## Unit Tests
+
+- No need to create unit tests for now
+
+## The `src` Project Directory
+
+Here are the project directories and their responsibilities:
+
+- `app`: this is where we define route segment, route layout, and the route page component itself.
+- `components`:
+  - the `ui` is used to contain the components that is generated with `shadcn`
+  - the `shared` directory could be used to contain custom ui that is usable for both student and admin facing sites
+  - the `admin` directory is used to contain custom ui's tailored specifically for admin facing site
+  - the `student` directory is used to contain custom ui's tailored specifically for admin facing site
+  - the `icon` directory is used to contain the custom svg icons. This directory should be rarely used, unleess you cannot find the icon in the `lucide-react` package.
+- `lib`: contains our helper functions
+- `config`: contains our configuration files and constants
+- `contexts`: contains our custom react contexts
+- `guards`: contains our guard functions that could be used in server side and client side. Making sure that ONLY appropriate users could access student pages and admin pages.
+- `hooks`: contains our custom hooks
+- `i18n`: contains the configuration of server side `next-intl` and the `messages` dictionary
+- `middlewares`: contains the necessary NextJS middlewares that could be chained together later in the `middlewares.ts`
+- `types`: contains our type definitions (base entity types and dto)
+
+## About the Infra Cost and Our Condition
+
+- We are an early-stage company building an LMS (Learning Management System) project for our group members.
+- We need to keep the IT infra cost as low as possible while maintaining the performance and security of our Student and Admin facing sites. We can't afford paying too much money for infra cost
+
+## Choosing the Right Rendering Method
+
+- This is a NextJS project, which enables us to apply specific rendering methods for each page.
+- I need you to think critically, thoroughly, and carefully on choosing the right rendering method for the page you create.
+- Carefully decide when to use SSR, SSG, ISR, and CSR.
+
+## Creating User Interface
+
+- Be really careful, do not break any components, layouts, pages that we have created
+- Make sure that any component that you create is responsive on mobile, tabs, and larger displays like laptop or pc monitor. It should be properly displayed and profesionally presented to the users' device.
+- Emphasis on the accessibility. Do not forget to add `aria` labels and other necessary properties to make sure that our web app is highly accessible
+- Provide necessary Interface or Type for the component props, states, and functions.
+- If you need to put an icon on the component, use the icons from the `lucide-react` library
+
+### Pages and Their components
+
+- IT IS IMPORTANT TO KEEP any `page.tsx` and `layout.tsx` component as Server Side components
+- If the a child component within a `page.tsx` needs interactivity, event handlers, states, and hooks, you should create a separated component for it and make sure it is marked with `use client`. Put these
+
+## API Calls
+
+- Follow the repository pattern
+
+### Preparing Type Definitions
+
+- Make sure to create the base entity/types you need in the `src/types`. Example: `course.ts` and `user.ts`. This base entity/types should be able to be used in the components, functions, .etc.
+- Define the Request and Response types in the `src/types/dto`.
+  - if the query/API call is a GET many endpoint, use the `paginated-request.ts` to type the request and `paginated-response.ts` to type the response.
+
+### Creating API functions
+
+- Make sure you have prepared the necessary base type definitions
+- Define the Request and Response types in the `src/types/dto`.
+  - Refer to the api contract rules in the `.cursor/rules/api/contracts`
+  - if the query/API call is a GET many endpoint, use the `paginated-request.ts` to type the request and `paginated-response.ts` to type the response.
+  - Make sure to create type definitions for the Get Many, Get By Id/Slug, Create, Update, and Delete calls.
+- Create the actual API functions in the `src/api`. Refer to the examples like `src/api/admin/courses.api.ts`
+  - Create a file with a name like `{feature-domain}.api.ts`.
+  - Use the `axiosClient` instance because it will be used for client side API calls
+  - Make sure to create API functions that cover Get Many, Get By Id/Slug, Create, Update, and Delete calls
+  - Make sure that each functions' param and return types are annotated by the correct dto type definitions
+  that you've created before
+
+### Doing the API calls (queries and mutations)
+
+- Make sure to prepare the query keys to manage data caching. See the examples at `src/lib/query-client.ts`.
+- The API calls could be executed in components, custom hooks, or contexts.
+  - Use `useQuery` to fetch data
+    - The default `staleTime` for all queries is set to `60 * 1000` (60 seconds).
+    - Set the `staleTime` to `5000` (5 seconds) for every GET many/paginated calls.
+  - Use `useMutation` to mutate data (POST, PUT, PATCH, DELETE). Make sure to always define these properties:
+    - The `mutationFn` with async function,
+    - `onSuccess` which does these things:
+      - Invalidate particular queries using `invalidateQueries` from `getQueryClient` function that is imported from `@/lib/get-query-client`.
+      - Display success message with toast
+      - Route the user onto particular page
+    - `onError` handler to display a toast with the necessary error message
+
+## Handling Forms
+
+Refer to the complete rules in the `.cursor/rules/form-handling.mdc`

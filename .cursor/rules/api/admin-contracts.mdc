@@ -1,0 +1,9 @@
+---
+description: Admin API Contracts
+alwaysApply: false
+---
+
+# API Contracts
+
+- This is the rule for you to properly create the type definitions for the API requests and responses on the Admin side.
+- Refer to the `.mdc` rules within the `.cursor/rules/api/contracts/admin/` for the complete list of the contracts for each feature domain

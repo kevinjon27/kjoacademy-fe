@@ -1,0 +1,160 @@
+---
+alwaysApply: false
+---
+
+# Admin Course Lessons API Contracts
+
+BASE_URL: `${API_BASE_URL}/v1/admin/lessons`
+
+## GET Many Lessons
+
+- `GET BASE_URL`
+  - Get many course lessons data
+  - Each course lesson returned should have `txt:responseBody` shape
+  - Note for backend:
+    - Make sure to use laravel `paginate` to return the list of the `txt:responseBody`
+
+```txt:requestQuery
+{
+  q?: string; // search query
+  perPage?: string; // how many items per page
+  page?: string;  // current page
+}
+```
+
+```txt:responseBody
+{
+  id: string;
+  title: string;
+  order: number;
+  lesson_type: string;
+  lesson_content_url: string;
+  duration_seconds: number;
+  is_published: boolean;
+  module: {
+    id: string;
+    title: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+```
+
+## POST Create Lesson
+
+- `POST BASE_URL`
+  - Create new course lesson
+  - The returned course lesson should have `txt:responseBody` shape
+
+```txt:requestBody
+{
+  course_module_id: string;
+  title: string;
+  lesson_type: string;
+  lesson_content_url: string;
+  duration_seconds: number;
+  is_published: boolean;
+}
+```
+
+```txt:responseBody
+{
+  id: string;
+  title: string;
+  order: number;
+  lesson_type: string;
+  lesson_content_url: string;
+  duration_seconds: number;
+  is_published: boolean;
+  module: {
+    id: string;
+    title: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+```
+
+## GET Course Lesson By ID
+
+- `GET BASE_URL/{id}`
+  - Get course lesson data by id
+  - The returned course lesson should have `txt:responseBody` shape
+
+```txt:requestParam
+id: string; // id of the module
+```
+
+```txt:responseBody
+{
+  id: string;
+  title: string;
+  order: number;
+  lesson_type: string;
+  lesson_content_url: string;
+  duration_seconds: number;
+  is_published: boolean;
+  module: {
+    id: string;
+    title: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+```
+
+## PUT Update Course Lesson
+
+- `PUT BASE_URL/{id}`
+  - Update course lesson data
+  - Could be used to publish/unpublish course lesson too
+  - The returned course lesson should have `txt:responseBody` shape
+
+```txt:requestParam
+id: string; // id of the module
+```
+
+```txt:requestBody
+{
+  course_module_id: string;
+  title: string;
+  lesson_type: string;
+  lesson_content_url: string;
+  duration_seconds: number;
+  is_published: boolean;
+}
+```
+
+```txt:responseBody
+{
+  id: string;
+  title: string;
+  order: number;
+  lesson_type: string;
+  lesson_content_url: string;
+  duration_seconds: number;
+  is_published: boolean;
+  module: {
+    id: string;
+    title: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+```
+
+## DELETE Delete Course Lesson
+
+- `DELETE BASE_URL/{id}`
+  - Delete course module data (Soft Delete)
+  - The returned data should have `txt:responseBody` shape
+
+```txt:requestParam
+id: string; // id of the lesson
+```
+
+```txt:responseBody
+{
+  message: string
+}
+```

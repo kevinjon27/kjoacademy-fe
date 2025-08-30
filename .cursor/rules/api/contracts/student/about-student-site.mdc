@@ -1,0 +1,14 @@
+---
+description: About the Student Site
+alwaysApply: false
+---
+
+# The Student Site of KJO Academy LMS
+
+- The student dashboard will be used to manage the course categories, courses, modules, and lessons across the app
+- The admin routes and pages are placed within `@/app/(main)` directory.
+- The root `layout.tsx` component should be kept lean at it is.
+- The main layout for the student features (except auth) is the `@/app/(protected)/layout.tsx`. This layout wraps the app with the necessary Providers
+- Use the shared components from the `@/components/shared` directory whenever possible
+- If an Student page needs a dedicated component and it is specific for Student site only, create the components in `@/components/student`
+- Leave the `@/components/ui` directory for generated shadcn components
