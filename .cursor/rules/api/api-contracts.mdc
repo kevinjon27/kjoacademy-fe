@@ -1,0 +1,31 @@
+---
+alwaysApply: false
+---
+# API Contracts
+
+## Admin API Contracts
+
+- This is the rule for you to properly create the type definitions for the API requests and responses on the Admin side.
+- Refer to the `.mdc` rules within the `.cursor/rules/api/contracts/admin/` for the complete list of the contracts for each feature domain
+
+## Student API Contracts
+
+- This is the rule for you to properly create the type definitions for the API requests and responses on the Student side.
+- Refer to the `.mdc` rules within the `.cursor/rules/api/contracts/student` for the complete list of the contracts for each feature domain
+
+## Important on Paginated Queries
+
+- Use laravel `paginate` to process data with pagination
+- You need to make sure that we do not bring all the laravel paginated data attributes. We want to only bring the attributes define in the shape below:
+
+```txt:paginatedData
+{
+  data: T[];
+  current_page: number;
+  per_page: number;
+  last_page: number;
+  from: number;
+  to: number;
+  total: number;
+}
+```
