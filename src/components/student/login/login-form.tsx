@@ -102,7 +102,6 @@ export default function LoginForm({ requestLoginOTP, signInWithOtp }: Props) {
       const result = await signInWithOtp(formData.phone, otp, "student-login");
       if (result) {
         setShowOtpDialog(false);
-        localStorage.setItem(LS_KEYS.userData, JSON.stringify(result.user));
         localStorage.removeItem(LS_KEYS.otpRequestData);
         router.push("/");
       }

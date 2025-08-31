@@ -99,10 +99,12 @@ export default function LoginForm({ requestLoginOTP, signInWithOtp }: Props) {
   // verify and sign in with OTP
   const verifyLoginOTP = async (otp: string) => {
     try {
-      await signInWithOtp(formData.phone, otp, "admin-login");
-      setShowOtpDialog(false);
-      localStorage.removeItem(LS_KEYS.otpRequestData);
-      router.push("/admin");
+      const result = await signInWithOtp(formData.phone, otp, "admin-login");
+      if (result) {
+        setShowOtpDialog(false);
+        localStorage.removeItem(LS_KEYS.otpRequestData);
+        router.push("/admin");
+      }
     } catch (error) {
       console.error("Error signing in with OTP", error);
       // You might want to show an error message to the user here
