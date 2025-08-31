@@ -57,8 +57,8 @@ export function CourseCard({ course, onPlay, className }: CourseCardProps) {
       <CardContent className="pt-0">
         <div className="flex items-center">
           <span className="text-sm text-muted-foreground">
-            {course.enrolled_count}{" "}
-            {course.enrolled_count === 1 ? "member" : "members"} enrolled
+            {course.enrollment_count}{" "}
+            {course.enrollment_count === 1 ? "member" : "members"} enrolled
           </span>
         </div>
       </CardContent>
