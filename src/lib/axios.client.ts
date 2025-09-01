@@ -5,7 +5,7 @@ import axios, {
   AxiosRequestConfig,
 } from "axios";
 import Cookies from "js-cookie";
-import { API_BASE_URL, NEXT_PUBLIC_API_ROUTE_URL } from "@/config/api";
+import { API_BASE_URL } from "@/config/api";
 import { COOKIE_KEYS } from "@/config/storage";
 
 function getDeviceId(): string {
@@ -58,36 +58,4 @@ axiosClient.interceptors.response.use(
   }
 );
 
-// Use this instance to make requests to the Next.js API route
-const axiosClientNext: AxiosInstance = axios.create({
-  baseURL: NEXT_PUBLIC_API_ROUTE_URL,
-  timeout: 10000,
-  headers: {
-    common: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-  },
-});
-
-axiosClientNext.interceptors.request.use((config) => {
-  config.headers["X-Request-Id"] = crypto.randomUUID();
-  return config;
-});
-
-axiosClientNext.interceptors.response.use(
-  (response: AxiosResponse) => {
-    return response;
-  },
-  async (error: AxiosError) => {
-    const originalRequest = error.config as AxiosRequestConfig & {
-      _retry?: boolean;
-    };
-
-    // @TODO: Handle 401 Unauthorized error
-
-    return Promise.reject(error);
-  }
-);
-
-export { axiosClient, axiosClientNext };
+export { axiosClient };

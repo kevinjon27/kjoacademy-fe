@@ -1,37 +1,51 @@
 "use client";
 
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
-import { Play, Video, Image as ImageIcon, Headphones, Clock, Users } from "lucide-react";
-import { Course, CourseModule, CourseLesson } from "@/types/course";
+import { Play, Video, Clock, Users, BookOpen } from "lucide-react";
+import { humanizeDuration } from "@/lib/time";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { useQuery } from "@tanstack/react-query";
+import { coursesQueryKey } from "@/lib/query-key/courses";
+import { getCourseBySlug } from "@/api/student/courses.api";
+import { Course, CourseModule, CourseLesson } from "@/types/course";
 
 interface CourseDetailsProps {
-  course: Course;
-  modules: CourseModule[];
-  lectures: Record<number, CourseLesson[]>;
+  // course: Course;
+  // modules: CourseModule[];
+  // lectures: Record<number, CourseLesson[]>;
+  slug: string;
 }
 
-export function CourseDetails({ course, modules, lectures }: CourseDetailsProps) {
+export function CourseDetails({ slug }: CourseDetailsProps) {
+  const { data: course, isLoading: isCourseLoading } = useQuery({
+    queryKey: coursesQueryKey.detail(slug),
+    queryFn: async () => {
+      const result = await getCourseBySlug(slug);
+      return result.data;
+    },
+  });
+
   const getMediaTypeIcon = (mediaType: string) => {
     switch (mediaType) {
-      case "video":
+      case "video/mp4":
         return <Video className="h-4 w-4" />;
-      case "image":
-        return <ImageIcon className="h-4 w-4" />;
-      case "audio":
-        return <Headphones className="h-4 w-4" />;
       default:
-        return <Video className="h-4 w-4" />;
+        return <BookOpen className="h-4 w-4" />;
     }
   };
 
   const formatDuration = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    
+
     if (hours > 0) {
       return `${hours}h ${minutes}m`;
     }
@@ -39,22 +53,29 @@ export function CourseDetails({ course, modules, lectures }: CourseDetailsProps)
   };
 
   const getTotalDuration = (lectures: CourseLesson[]) => {
-    return lectures.reduce((total, lesson) => total + lesson.duration_seconds, 0);
+    return lectures.reduce(
+      (total, lesson) => total + lesson.duration_seconds,
+      0
+    );
   };
+
+  console.log("the courseData from API", course);
+
+  if (!course) return <div>Course not found</div>;
 
   return (
     <div className="space-y-8">
       {/* Hero Section with Background Image */}
       <div className="relative min-h-[400px] rounded-lg overflow-hidden">
-        <Image
+        {/* <Image
           src={course.bg_img_url}
           alt={course.title}
           fill
           className="object-cover"
           priority
-        />
+        /> */}
         <div className="absolute inset-0 bg-black/50" />
-        
+
         <div className="relative z-10 p-6 md:p-8 lg:p-12 flex flex-col lg:flex-row gap-8 items-start">
           {/* Left Side - Course Info */}
           <div className="flex-1 text-white space-y-4">
@@ -62,12 +83,12 @@ export function CourseDetails({ course, modules, lectures }: CourseDetailsProps)
               {course.title}
             </h1>
             <p className="text-lg md:text-xl text-gray-200 max-w-2xl">
-              Master the fundamentals of cryptocurrency trading with our comprehensive course designed for beginners and intermediate traders.
+              {course.description}
             </p>
             <div className="flex items-center gap-6 text-sm md:text-base">
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
-                <span>{course.enrolled_count} members enrolled</span>
+                <span>{course.enrollment_count} members enrolled</span>
               </div>
             </div>
           </div>
@@ -82,26 +103,25 @@ export function CourseDetails({ course, modules, lectures }: CourseDetailsProps)
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Modules</span>
-                    <span className="font-medium">{modules.length}</span>
+                    <span className="font-medium">{course.modules_count}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Total Lessons</span>
                     <span className="font-medium">
-                      {Object.values(lectures).reduce((total, moduleLessons) => total + moduleLessons.length, 0)}
+                      {/* {Object.values(lectures).reduce(
+                        (total, moduleLessons) => total + moduleLessons.length,
+                        0
+                      )} */}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Duration</span>
                     <span className="font-medium">
-                      {formatDuration(
-                        Object.values(lectures).reduce((total, moduleLessons) => 
-                          total + getTotalDuration(moduleLessons), 0
-                        )
-                      )}
+                      {humanizeDuration(course.duration_seconds)}
                     </span>
                   </div>
                 </div>
-                
+
                 <Link href={`/course/${course.slug}/learn`}>
                   <Button className="w-full" size="lg">
                     <Play className="h-4 w-4 mr-2" />
@@ -115,13 +135,14 @@ export function CourseDetails({ course, modules, lectures }: CourseDetailsProps)
       </div>
 
       {/* Course Modules Section */}
-      <div className="space-y-6">
+      {/* <div className="space-y-6">
         <div>
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
             Course Content
           </h2>
           <p className="text-muted-foreground">
-            Explore the comprehensive modules and lectures designed to take you from beginner to expert.
+            Explore the comprehensive modules and lectures designed to take you
+            from beginner to expert.
           </p>
         </div>
 
@@ -129,7 +150,7 @@ export function CourseDetails({ course, modules, lectures }: CourseDetailsProps)
           {modules.map((module) => {
             const moduleLessons = lectures[module.id] || [];
             const moduleDuration = getTotalDuration(moduleLessons);
-            
+
             return (
               <AccordionItem
                 key={module.id}
@@ -153,7 +174,7 @@ export function CourseDetails({ course, modules, lectures }: CourseDetailsProps)
                     </div>
                   </div>
                 </AccordionTrigger>
-                
+
                 <AccordionContent>
                   <div className="space-y-3 pb-4">
                     {moduleLessons.map((lesson) => (
@@ -181,7 +202,7 @@ export function CourseDetails({ course, modules, lectures }: CourseDetailsProps)
             );
           })}
         </Accordion>
-      </div>
+      </div> */}
     </div>
   );
 }

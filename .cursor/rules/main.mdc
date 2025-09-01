@@ -88,17 +88,6 @@ Here are the project directories and their responsibilities:
 - `middlewares`: contains the necessary NextJS middlewares that could be chained together later in the `middlewares.ts`
 - `types`: contains our type definitions (base entity types and dto)
 
-## About the Infra Cost and Our Condition
-
-- We are an early-stage company building an LMS (Learning Management System) project for our group members.
-- We need to keep the IT infra cost as low as possible while maintaining the performance and security of our Student and Admin facing sites. We can't afford paying too much money for infra cost
-
-## Choosing the Right Rendering Method
-
-- This is a NextJS project, which enables us to apply specific rendering methods for each page.
-- I need you to think critically, thoroughly, and carefully on choosing the right rendering method for the page you create.
-- Carefully decide when to use SSR, SSG, ISR, and CSR.
-
 ## Creating User Interface
 
 - Be really careful, do not break any components, layouts, pages that we have created

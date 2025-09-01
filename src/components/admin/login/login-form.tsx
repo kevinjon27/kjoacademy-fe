@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { LS_KEYS } from "@/config/storage";
-import { axiosClientNext } from "@/lib/axios.client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
