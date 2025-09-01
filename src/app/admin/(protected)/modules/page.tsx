@@ -77,10 +77,10 @@ export default function AdminModulesPage() {
               Manage course modules and their content
             </p>
           </div>
-          <Button>
+          {/* <Button>
             <Plus className="h-4 w-4 mr-2" />
             Create Module
-          </Button>
+          </Button> */}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

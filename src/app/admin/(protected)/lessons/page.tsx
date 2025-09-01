@@ -77,10 +77,10 @@ export default function AdminLessonsPage() {
               Manage individual lessons within course modules
             </p>
           </div>
-          <Button>
+          {/* <Button>
             <Plus className="h-4 w-4 mr-2" />
             Create Lesson
-          </Button>
+          </Button> */}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

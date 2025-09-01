@@ -29,9 +29,6 @@ export function CourseCard({ course, onDeleteClick }: Props) {
               <CardTitle className="text-lg line-clamp-1">
                 {course.title}
               </CardTitle>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                {course.category.title}
-              </p>
             </div>
           </div>
           <div className="flex items-center space-x-1">
@@ -55,6 +52,17 @@ export function CourseCard({ course, onDeleteClick }: Props) {
         <CardDescription className="mb-4 line-clamp-2">
           {course.description}
         </CardDescription>
+
+        <div className="flex flex-wrap items-center gap-2 mb-4">
+          {course.categories.map((category) => (
+            <Badge
+              key={`cat-badge-${course.id}-${category.id}`}
+              className="text-xs bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200"
+            >
+              {category.title}
+            </Badge>
+          ))}
+        </div>
 
         <div className="space-y-3">
           <div className="flex items-center justify-between text-sm">
@@ -84,19 +92,26 @@ export function CourseCard({ course, onDeleteClick }: Props) {
             </span>
           </div>
 
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-gray-500 dark:text-gray-400">Lessons:</span>
+            <span className="font-medium text-gray-900 dark:text-white">
+              {course.lessons_count}
+            </span>
+          </div>
+
           <div className="flex items-center justify-between">
             <Badge
               className={
                 course.is_published
-                  ? "bg-success-500 text-primary-foreground"
-                  : "bg-muted text-muted-foreground"
+                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                  : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
               }
             >
               {course.is_published ? "Published" : "Not Published"}
             </Badge>
-            <Button variant="outline" size="sm">
+            {/* <Button variant="outline" size="sm">
               Manage
-            </Button>
+            </Button> */}
           </div>
         </div>
       </CardContent>

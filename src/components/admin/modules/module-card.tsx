@@ -83,9 +83,6 @@ export function ModuleCard({ module, onDeleteClick }: Props) {
               <Button variant="outline" size="sm">
                 Lessons
               </Button>
-              <Button variant="outline" size="sm">
-                Manage
-              </Button>
             </div>
           </div>
         </div>

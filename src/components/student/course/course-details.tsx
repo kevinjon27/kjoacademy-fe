@@ -115,15 +115,6 @@ export function CourseDetails({ slug }: CourseDetailsProps) {
     retry: false,
   });
 
-  const getMediaTypeIcon = (mediaType: string) => {
-    switch (mediaType) {
-      case "video/mp4":
-        return <Video className="h-4 w-4" />;
-      default:
-        return <BookOpen className="h-4 w-4" />;
-    }
-  };
-
   if (!course) return <div>Course not found</div>;
 
   return (

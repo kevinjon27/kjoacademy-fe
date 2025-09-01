@@ -17,11 +17,11 @@ export type Course = {
   enrollment_count: number;
   duration_seconds: number;
   is_published: boolean;
-  category: {
+  categories: {
     id: string;
     title: string;
     slug: string;
-  };
+  }[];
   modules_count: number;
   lessons_count: number;
 };

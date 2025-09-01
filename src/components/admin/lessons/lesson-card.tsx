@@ -96,9 +96,6 @@ export function LessonCard({ lesson, onDeleteClick }: Props) {
               <Button variant="outline" size="sm">
                 Preview
               </Button>
-              <Button variant="outline" size="sm">
-                Edit
-              </Button>
             </div>
           </div>
         </div>
