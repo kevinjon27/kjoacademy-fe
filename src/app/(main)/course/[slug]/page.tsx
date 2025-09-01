@@ -6,7 +6,7 @@ import { Header } from "@/components/student/header";
 import { Footer } from "@/components/student/footer";
 import { CourseDetails } from "@/components/student/course/course-details";
 import { withStudentAreaProtection } from "@/guards/withAuthProtected.server";
-import { Course } from "@/types/course";
+import { CourseDetails as CourseDetailsType } from "@/types/course-details";
 
 export type Props = {
   params: Promise<{
@@ -14,14 +14,14 @@ export type Props = {
   }>;
 };
 
-async function getCourseBySlug(slug: string): Promise<Course> {
-  const result = await serverFetcher(
+async function getCourseBySlug(slug: string): Promise<CourseDetailsType> {
+  const response = await serverFetcher(
     `${process.env.NEXT_PUBLIC_API_URL}/v1/courses/${slug}`,
     {
       method: "GET",
     }
   );
-  const json = await result.json();
+  const json = await response.json();
   return json.data;
 }
 
@@ -31,14 +31,14 @@ export default async function CourseDetailPage({ params }: Props) {
   const { slug } = await params;
 
   const queryClient = getQueryClient();
-
   await queryClient.prefetchQuery({
     queryKey: coursesQueryKey.detail(slug),
     queryFn: () => getCourseBySlug(slug),
   });
+  const dehydratedState = dehydrate(queryClient);
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <HydrationBoundary state={dehydratedState}>
       <Header />
       <section className="container mx-auto px-4 py-8">
         <CourseDetails slug={slug} />

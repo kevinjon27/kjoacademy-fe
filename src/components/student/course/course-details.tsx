@@ -1,6 +1,5 @@
 "use client";
 
-// import Image from "next/image";
 import Link from "next/link";
 import { Play, Video, Clock, Users, BookOpen } from "lucide-react";
 import { humanizeDuration } from "@/lib/time";
@@ -15,22 +14,105 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { coursesQueryKey } from "@/lib/query-key/courses";
 import { getCourseBySlug } from "@/api/student/courses.api";
-import { Course, CourseModule, CourseLesson } from "@/types/course";
+import {
+  CourseDetails as CourseDetailsType,
+  CourseDetailsModule,
+  CourseDetailsLesson,
+} from "@/types/course-details";
 
 interface CourseDetailsProps {
-  // course: Course;
-  // modules: CourseModule[];
-  // lectures: Record<number, CourseLesson[]>;
   slug: string;
+}
+
+export function RenderModulesAndLessons({
+  modules,
+}: {
+  modules: CourseDetailsModule[];
+}) {
+  const getTotalDuration = (lessons: CourseDetailsLesson[]): number => {
+    return lessons.reduce(
+      (total, lesson) => total + lesson.duration_seconds,
+      0
+    );
+  };
+
+  const getMediaTypeIcon = (mediaType: string) => {
+    switch (mediaType) {
+      case "video/mp4":
+        return <Video className="h-4 w-4" />;
+      default:
+        return <BookOpen className="h-4 w-4" />;
+    }
+  };
+
+  return (
+    <Accordion type="single" collapsible className="space-y-4">
+      {modules.map((module) => {
+        const moduleLessons = module.lessons || [];
+        const moduleDuration = getTotalDuration(moduleLessons);
+
+        return (
+          <AccordionItem
+            key={module.id}
+            value={`module-${module.id}`}
+            className="border rounded-lg px-4"
+          >
+            <AccordionTrigger className="hover:no-underline py-6">
+              <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 text-left">
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg">{module.title}</h3>
+                </div>
+                <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <Video className="h-4 w-4" />
+                    <span>{module.lessons_count} lectures</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Clock className="h-4 w-4" />
+                    <span>{humanizeDuration(moduleDuration)}</span>
+                  </div>
+                </div>
+              </div>
+            </AccordionTrigger>
+
+            <AccordionContent>
+              <div className="space-y-3 pb-4">
+                {moduleLessons.map((lesson) => (
+                  <div
+                    key={lesson.id}
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors"
+                  >
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary">
+                      {getMediaTypeIcon(lesson.lesson_type)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-sm truncate">
+                        {lesson.title}
+                      </h4>
+                    </div>
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <Clock className="h-3 w-3" />
+                      <span>{humanizeDuration(lesson.duration_seconds)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        );
+      })}
+    </Accordion>
+  );
 }
 
 export function CourseDetails({ slug }: CourseDetailsProps) {
   const { data: course, isLoading: isCourseLoading } = useQuery({
     queryKey: coursesQueryKey.detail(slug),
-    queryFn: async () => {
+    queryFn: async (): Promise<CourseDetailsType> => {
       const result = await getCourseBySlug(slug);
       return result.data;
     },
+    retry: false,
   });
 
   const getMediaTypeIcon = (mediaType: string) => {
@@ -42,38 +124,12 @@ export function CourseDetails({ slug }: CourseDetailsProps) {
     }
   };
 
-  const formatDuration = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-
-    if (hours > 0) {
-      return `${hours}h ${minutes}m`;
-    }
-    return `${minutes}m`;
-  };
-
-  const getTotalDuration = (lectures: CourseLesson[]) => {
-    return lectures.reduce(
-      (total, lesson) => total + lesson.duration_seconds,
-      0
-    );
-  };
-
-  console.log("the courseData from API", course);
-
   if (!course) return <div>Course not found</div>;
 
   return (
     <div className="space-y-8">
       {/* Hero Section with Background Image */}
       <div className="relative min-h-[400px] rounded-lg overflow-hidden">
-        {/* <Image
-          src={course.bg_img_url}
-          alt={course.title}
-          fill
-          className="object-cover"
-          priority
-        /> */}
         <div className="absolute inset-0 bg-black/50" />
 
         <div className="relative z-10 p-6 md:p-8 lg:p-12 flex flex-col lg:flex-row gap-8 items-start">
@@ -107,12 +163,7 @@ export function CourseDetails({ slug }: CourseDetailsProps) {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Total Lessons</span>
-                    <span className="font-medium">
-                      {/* {Object.values(lectures).reduce(
-                        (total, moduleLessons) => total + moduleLessons.length,
-                        0
-                      )} */}
-                    </span>
+                    <span className="font-medium">{course.lessons_count}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Duration</span>
@@ -135,7 +186,7 @@ export function CourseDetails({ slug }: CourseDetailsProps) {
       </div>
 
       {/* Course Modules Section */}
-      {/* <div className="space-y-6">
+      <div className="space-y-6">
         <div>
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
             Course Content
@@ -146,63 +197,8 @@ export function CourseDetails({ slug }: CourseDetailsProps) {
           </p>
         </div>
 
-        <Accordion type="single" collapsible className="space-y-4">
-          {modules.map((module) => {
-            const moduleLessons = lectures[module.id] || [];
-            const moduleDuration = getTotalDuration(moduleLessons);
-
-            return (
-              <AccordionItem
-                key={module.id}
-                value={`module-${module.id}`}
-                className="border rounded-lg px-4"
-              >
-                <AccordionTrigger className="hover:no-underline py-6">
-                  <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-8 text-left">
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-lg">{module.title}</h3>
-                    </div>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Video className="h-4 w-4" />
-                        <span>{module.lectures_count} lectures</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        <span>{formatDuration(moduleDuration)}</span>
-                      </div>
-                    </div>
-                  </div>
-                </AccordionTrigger>
-
-                <AccordionContent>
-                  <div className="space-y-3 pb-4">
-                    {moduleLessons.map((lesson) => (
-                      <div
-                        key={lesson.id}
-                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors"
-                      >
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary">
-                          {getMediaTypeIcon(lesson.media_type)}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-medium text-sm truncate">
-                            {lesson.title}
-                          </h4>
-                        </div>
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Clock className="h-3 w-3" />
-                          <span>{formatDuration(lesson.duration_seconds)}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
-        </Accordion>
-      </div> */}
+        <RenderModulesAndLessons modules={course.modules} />
+      </div>
     </div>
   );
 }

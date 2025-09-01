@@ -1,5 +1,6 @@
 import { PaginatedResponse } from "@/types/dto/paginated-response";
 import { Course } from "@/types/course";
+import { CourseDetails } from "@/types/course-details";
 
 export type GetCoursesResponse = PaginatedResponse<Course>;
 
@@ -11,7 +12,7 @@ export type GetCourseResponse = {
 };
 
 export type GetCourseBySlugResponse = {
-  data: Course;
+  data: CourseDetails;
 };
 
 export type CreateCourseResponse = {

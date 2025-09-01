@@ -23,6 +23,7 @@ export type Course = {
     slug: string;
   };
   modules_count: number;
+  lessons_count: number;
 };
 
 export type CourseModule = {
