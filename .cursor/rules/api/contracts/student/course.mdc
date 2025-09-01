@@ -2,9 +2,9 @@
 alwaysApply: false
 ---
 
-# Admin Course Categories API Contracts
+# Student Course Categories API Contracts
 
-BASE_URL: `${API_BASE_URL}/v1/admin/courses`
+BASE_URL: `${API_BASE_URL}/v1/courses`
 
 ## GET Many Courses
 
