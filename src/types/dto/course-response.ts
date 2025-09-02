@@ -17,12 +17,12 @@ export type GetCourseBySlugResponse = {
 
 export type CreateCourseResponse = {
   message: string;
-  data: Course;
+  data: CourseDetails;
 };
 
 export type UpdateCourseResponse = {
   message: string;
-  data: Course;
+  data: CourseDetails;
 };
 
 export type DeleteCourseResponse = {

@@ -11,6 +11,16 @@ export type CreateCourseRequest = {
   description: string;
   thumbnail_url: string;
   is_published: boolean;
+  modules: {
+    title: string;
+    duration_seconds?: number;
+    lessons: {
+      title: string;
+      lesson_type: string;
+      lesson_content_url: string;
+      duration_seconds: number;
+    }[];
+  }[];
 };
 
 export type UpdateCourseRequest = {
@@ -20,4 +30,14 @@ export type UpdateCourseRequest = {
   description: string;
   thumbnail_url: string;
   is_published: boolean;
+  modules: {
+    title: string;
+    duration_seconds?: number;
+    lessons: {
+      title: string;
+      lesson_type: string;
+      lesson_content_url: string;
+      duration_seconds: number;
+    }[];
+  }[];
 };

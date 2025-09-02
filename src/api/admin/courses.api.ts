@@ -1,4 +1,5 @@
 import { axiosClient } from "@/lib/axios.client";
+import { sanitizeQueryParams } from "@/lib/query-params";
 import {
   GetCoursesRequest,
   GetCoursesByCategorySlugRequest,
@@ -20,7 +21,7 @@ export const getCourses = async (
   params: GetCoursesRequest
 ): Promise<GetCoursesResponse> => {
   const response = await axiosClient.get(BASE_URL, {
-    params: params || {},
+    params: sanitizeQueryParams(params || {}),
   });
   return response.data;
 };
