@@ -27,8 +27,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { FormSwitch } from "@/components/shared/form-switch";
-import { MultiSelect, MultiSelectOption } from "@/components/shared/multi-select";
+import { Switch } from "@/components/ui/switch";
+import {
+  MultiSelect,
+  MultiSelectOption,
+} from "@/components/shared/multi-select";
 import { getCourseCategories } from "@/api/admin/categories.api";
 import { createCourse, updateCourse } from "@/api/admin/courses.api";
 import { CourseCategory, Course } from "@/types/course";
@@ -73,7 +76,9 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
   const params = useParams();
   const { slug: routeSlug = "" } = params;
   const [searchCategory, setSearchCategory] = useState("");
-  const [categoryOptions, setCategoryOptions] = useState<MultiSelectOption[]>([]);
+  const [categoryOptions, setCategoryOptions] = useState<MultiSelectOption[]>(
+    []
+  );
 
   // query to search categories
   const { data: categories } = useQuery({
@@ -346,11 +351,25 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
               )}
             />
 
-            <FormSwitch
+            <FormField
               control={form.control}
               name="is_published"
-              id="is_published"
-              label="Published"
+              render={({
+                field,
+              }: {
+                field: ControllerRenderProps<CourseFormData, "is_published">;
+              }) => (
+                <FormItem>
+                  <FormLabel>Published</FormLabel>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage id="is_published-error" />
+                </FormItem>
+              )}
             />
 
             <div className="flex gap-4">
