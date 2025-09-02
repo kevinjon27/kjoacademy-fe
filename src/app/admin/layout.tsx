@@ -26,10 +26,8 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body>
         <NextIntlClientProvider>
           <Providers>
             <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

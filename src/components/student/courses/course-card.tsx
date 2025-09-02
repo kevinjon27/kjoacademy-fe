@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Play } from "lucide-react";
+import { Play, Users } from "lucide-react";
 import { Course } from "@/types/course";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -56,6 +56,7 @@ export function CourseCard({ course, onPlay, className }: CourseCardProps) {
 
       <CardContent className="pt-0">
         <div className="flex items-center">
+          <Users className="h-5 w-5" />
           <span className="text-sm text-muted-foreground">
             {course.enrollment_count}{" "}
             {course.enrollment_count === 1 ? "member" : "members"} enrolled

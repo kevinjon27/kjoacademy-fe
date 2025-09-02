@@ -13,9 +13,9 @@ export default async function CoursesLayout({
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="flex">
+      <div className="grid grid-cols-1 lg:grid-cols-[256px_1fr] gap-0">
         <CoursesSidebar />
-        <section className="flex-1 p-6">{children}</section>
+        <section className="p-4 sm:p-6 lg:p-8">{children}</section>
       </div>
       <Footer />
     </div>

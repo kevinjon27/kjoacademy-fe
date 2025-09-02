@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
-import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
 import { Providers } from "./providers";
 import "../globals.css";
@@ -31,10 +30,11 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
-      >
+    <html
+      lang={locale}
+      className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
+    >
+      <body>
         <NextIntlClientProvider>
           <Providers>
             <main className="min-h-screen flex flex-1 flex-col">
