@@ -1,7 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { BaseDialog } from "@/components/ui/base-dialog";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -100,14 +106,12 @@ export function OtpDialog({
   const canResend = countdown === 0 && !isResending;
 
   return (
-    <BaseDialog
-      open={open}
-      onOpenChange={onOpenChange}
-      title="Enter OTP"
-      description={`We've sent a 6-digit code to ${phoneNumber}`}
-      showCloseButton={false}
-    >
-      <div className="space-y-6">
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent className="space-y-6">
+        <AlertDialogHeader>
+          <AlertDialogTitle>Enter OTP</AlertDialogTitle>
+          <AlertDialogDescription>{`We've sent a 6-digit code to ${phoneNumber}`}</AlertDialogDescription>
+        </AlertDialogHeader>
         {/* OTP Input */}
         <div className="space-y-4">
           <div className="flex justify-center space-x-2">
@@ -177,7 +181,7 @@ export function OtpDialog({
             Use different phone number
           </button>
         </div>
-      </div>
-    </BaseDialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
