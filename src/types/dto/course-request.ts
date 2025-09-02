@@ -6,7 +6,7 @@ export type GetCoursesByCategorySlugRequest = PaginatedRequest;
 
 export type CreateCourseRequest = {
   title: string;
-  category_id: string;
+  categories: string[];
   slug: string;
   description: string;
   thumbnail_url: string;
@@ -15,7 +15,7 @@ export type CreateCourseRequest = {
 
 export type UpdateCourseRequest = {
   title: string;
-  category_id: string;
+  categories: string[];
   slug: string;
   description: string;
   thumbnail_url: string;

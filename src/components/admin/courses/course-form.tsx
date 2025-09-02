@@ -28,10 +28,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { FormSwitch } from "@/components/shared/form-switch";
-import {
-  FormCombobox,
-  ComboboxOption,
-} from "@/components/shared/form-combobox";
+import { MultiSelect, MultiSelectOption } from "@/components/shared/multi-select";
 import { getCourseCategories } from "@/api/admin/categories.api";
 import { createCourse, updateCourse } from "@/api/admin/courses.api";
 import { CourseCategory, Course } from "@/types/course";
@@ -46,7 +43,7 @@ const courseFormSchema = z.object({
     .string()
     .min(1, "Title is required")
     .max(255, "Title must be at most 255 characters"),
-  category_id: z.string().min(1, "Course category is required"),
+  categories: z.array(z.string()).min(1, "Select at least one category"),
   slug: z
     .string()
     .min(1, "Slug is required")
@@ -76,10 +73,7 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
   const params = useParams();
   const { slug: routeSlug = "" } = params;
   const [searchCategory, setSearchCategory] = useState("");
-  const [categoryOptions, setCategoryOptions] = useState<ComboboxOption[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<
-    ComboboxOption | undefined
-  >(undefined);
+  const [categoryOptions, setCategoryOptions] = useState<MultiSelectOption[]>([]);
 
   // query to search categories
   const { data: categories } = useQuery({
@@ -151,16 +145,16 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
    * Populate the category combobox with the category of the course
    * Set the form values to the course data
    */
-  useEffect(() => {
-    if (courseData) {
-      setSelectedCategory({
-        value: courseData.category.id,
-        label: courseData.category.title,
-      });
-      form.reset(courseData);
-      form.setValue("category_id", courseData.category.id);
-    }
-  }, [courseData]);
+  // useEffect(() => {
+  //   if (courseData) {
+  //     setSelectedCategory({
+  //       value: courseData.category.id,
+  //       label: courseData.category.title,
+  //     });
+  //     form.reset(courseData);
+  //     form.setValue("category_id", courseData.category.id);
+  //   }
+  // }, [courseData]);
 
   useEffect(() => {
     if (categories?.length) {
@@ -179,7 +173,7 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
     resolver: zodResolver(courseFormSchema),
     defaultValues: {
       title: courseData?.title || "",
-      category_id: courseData?.category.id || "",
+      categories: courseData?.categories?.map((category) => category.id) || [],
       slug: courseData?.slug || "",
       description: courseData?.description || "",
       thumbnail_url: courseData?.thumbnail_url || "",
@@ -225,14 +219,32 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
               </div>
             )}
 
-            <FormCombobox
-              form={form}
-              name="category_id"
-              id="category_id"
-              label="Course Category"
-              options={categoryOptions}
-              defaultOption={selectedCategory}
-              onSearch={setSearchCategory}
+            <FormField
+              control={form.control}
+              name="categories"
+              render={({
+                field,
+              }: {
+                field: ControllerRenderProps<CourseFormData, "categories">;
+              }) => (
+                <FormItem>
+                  <FormLabel>Categories</FormLabel>
+                  <FormControl>
+                    <MultiSelect
+                      options={categoryOptions}
+                      defaultValue={field.value}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                      }}
+                      onSearch={(query) => {
+                        setSearchCategory(query);
+                      }}
+                      placeholder="Choose course categories"
+                    />
+                  </FormControl>
+                  <FormMessage id="categories-error" />
+                </FormItem>
+              )}
             />
 
             <FormField

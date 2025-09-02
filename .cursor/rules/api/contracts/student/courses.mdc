@@ -43,44 +43,6 @@ BASE_URL: `${API_BASE_URL}/v1/courses`
 }
 ```
 
-## POST Create Courses
-
-- `POST BASE_URL`
-  - Create new course data
-  - The returned course should have `txt:responseBody` shape
-
-```txt:requestBody
-{
-  title: string;
-  category_id: string;
-  slug: string;
-  description: string;
-  thumbnail_url: string;
-  is_published: boolean;
-}
-```
-
-```txt:responseBody
-{
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  thumbnail_url: string;
-  enrollment_count: number;
-  duration_seconds: number;
-  is_published: boolean;
-  categories: {
-    id: string;
-    title: string;
-    slug: string;
-  }[];
-  modules_count: number;
-  created_at: string;
-  updated_at: string;
-}
-```
-
 ## GET Courses By Category Slug
 
 - `GET BASE_URL/categories/{slug}`
@@ -161,64 +123,5 @@ BASE_URL: `${API_BASE_URL}/v1/courses`
   lessons_count: number;
   created_at: string;
   updated_at: string;
-}
-```
-
-## PUT Update Course
-
-- `PUT BASE_URL/{slug}`
-  - Update course data
-  - Could be used to publish/unpublish courses too
-  - The returned course should have `txt:responseBody` shape
-
-```txt:requestParam
-slug: string;
-```
-
-```txt:requestBody
-{
-  title: string;
-  category_id: string;
-  slug: string;
-  description: string;
-  thumbnail_url: string;
-  is_published: boolean;
-}
-```
-
-```txt:responseBody
-{
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  thumbnail_url: string;
-  enrollment_count: number;
-  duration_seconds: number;
-  is_published: boolean;
-  categories: {
-    id: string;
-    title: string;
-    slug: string;
-  }[];
-  modules_count: number;
-  created_at: string;
-  updated_at: string;
-}
-```
-
-## DELETE Delete Course
-
-- `DELETE BASE_URL/{slug}`
-  - Delete course data (Soft Delete)
-  - The returned data should have `txt:responseBody` shape
-
-```txt:requestParam
-slug: string
-```
-
-```txt:responseBody
-{
-  message: string
 }
 ```
