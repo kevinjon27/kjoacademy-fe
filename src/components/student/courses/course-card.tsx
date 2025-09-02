@@ -49,7 +49,7 @@ export function CourseCard({ course, onPlay, className }: CourseCardProps) {
       </div>
 
       <CardHeader className="pb-3">
-        <h3 className="font-semibold text-lg leading-tight line-clamp-2">
+        <h3 className="font-semibold text-lg leading-tight line-clamp-2 h-14">
           {course.title}
         </h3>
       </CardHeader>
