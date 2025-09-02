@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { useRouter, useParams } from "next/navigation";
 import { useForm, ControllerRenderProps, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -115,13 +116,15 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
   // mutation to create or update the course
   const { mutateAsync: createCourseMutation } = useMutation({
     mutationFn: async (data: CreateCourseRequest) => {
-      return await createCourse(data as CreateCourseRequest);
+      const result = await createCourse(data as CreateCourseRequest);
+      return result.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       const queryClient = getQueryClient();
       queryClient.invalidateQueries({
         queryKey: coursesQueryKey.lists(),
       });
+      toast.success(`Course "${data.title}" updated successfully`);
       router.push("/admin/courses");
     },
     onError: (error) => {
@@ -138,12 +141,14 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
 
   const { mutateAsync: updateCourseMutation } = useMutation({
     mutationFn: async (data: UpdateCourseRequest) => {
-      return await updateCourse(
+      const result = await updateCourse(
         routeSlug as string,
         data as UpdateCourseRequest
       );
+      return result.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log("onSuccess update", data);
       const queryClient = getQueryClient();
       queryClient.invalidateQueries({
         queryKey: coursesQueryKey.detail(routeSlug as string),
@@ -151,6 +156,7 @@ export function CourseForm({ isEdit = false, courseData }: CourseFormProps) {
       queryClient.invalidateQueries({
         queryKey: coursesQueryKey.all,
       });
+      toast.success(`Course "${data.title}" updated successfully`);
       router.push("/admin/courses");
     },
     onError: (error) => {
