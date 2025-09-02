@@ -46,12 +46,11 @@ export default function LoginForm({ requestLoginOTP, signInWithOtp }: Props) {
 
     if (otpRequestData) {
       const parsedOtpRequestData = JSON.parse(otpRequestData) as OtpRequestData;
-      const isRequestNotExpired = dayjs(parsedOtpRequestData.expiresAt).isAfter(dayjs());
-      console.log("parsedOtpRequestData", parsedOtpRequestData);
-      console.log('now Time', dayjs().toISOString());
-      console.log('expiresAt', dayjs(parsedOtpRequestData.expiresAt).toISOString());
-      console.log("dayjs(parsedOtpRequestData.expiresAt).isAfter(dayjs())", dayjs(parsedOtpRequestData.expiresAt).isAfter(dayjs()));
+      const isRequestNotExpired = dayjs(parsedOtpRequestData.expiresAt).isAfter(
+        dayjs()
+      );
       if (isRequestNotExpired) {
+        setFormData((prev) => ({ ...prev, phone: parsedOtpRequestData.phone }));
         setShowOtpDialog(true);
       } else {
         localStorage.removeItem(LS_KEYS.otpRequestData);
