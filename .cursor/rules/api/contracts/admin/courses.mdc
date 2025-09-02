@@ -85,45 +85,25 @@ BASE_URL: `${API_BASE_URL}/v1/admin/courses`
     title: string;
     slug: string;
   }[];
-  modules_count: number;
-  created_at: string;
-  updated_at: string;
-}
-```
-
-## GET Courses By Category Slug
-
-- `GET BASE_URL/categories/{slug}`
-  - Get courses data by category slug.
-  - Search by courses from specific category
-  - Each course returned should have `txt:responseBody` shape
-  - Note for backend:
-    - Make sure to use laravel `paginate` to return the list of the `txt:responseBody`
-
-```txt:requestQuery
-{
-  q?: string; // search query
-  perPage?: string; // how many items per page
-  page?: string;  // current page
-}
-```
-
-```txt:responseBody
-{
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  thumbnail_url: string;
-  enrollment_count: number;
-  duration_seconds: number;
-  is_published: boolean;
-  categories: {
+  modules: {
     id: string;
     title: string;
-    slug: string;
-  }[];
+    order: number;
+    lessons_count: number
+    duration_seconds: number;
+    is_published: boolean;
+    lessons: {
+      id: string;
+      title: string;
+      order: number;
+      lesson_type: string;
+      lesson_content_url: string;
+      duration_seconds: number;
+      is_published: boolean;
+    }[]
+  }[]
   modules_count: number;
+  lessons_count: number;
   created_at: string;
   updated_at: string;
 }
@@ -221,7 +201,25 @@ slug: string;
     title: string;
     slug: string;
   }[];
+  modules: {
+    id: string;
+    title: string;
+    order: number;
+    lessons_count: number
+    duration_seconds: number;
+    is_published: boolean;
+    lessons: {
+      id: string;
+      title: string;
+      order: number;
+      lesson_type: string;
+      lesson_content_url: string;
+      duration_seconds: number;
+      is_published: boolean;
+    }[]
+  }[]
   modules_count: number;
+  lessons_count: number;
   created_at: string;
   updated_at: string;
 }

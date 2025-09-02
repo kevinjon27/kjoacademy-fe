@@ -6,7 +6,7 @@ import { Header } from "@/components/student/header";
 import { Footer } from "@/components/student/footer";
 import { CourseDetails } from "@/components/student/course/course-details";
 import { withStudentAreaProtection } from "@/guards/withAuthProtected.server";
-import { CourseDetails as CourseDetailsType } from "@/types/course-details";
+import { CourseDetails as CourseDetailsType } from "@/types/course";
 
 export type Props = {
   params: Promise<{

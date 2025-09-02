@@ -18,7 +18,7 @@ import {
   CourseDetails as CourseDetailsType,
   CourseDetailsModule,
   CourseDetailsLesson,
-} from "@/types/course-details";
+} from "@/types/course";
 
 interface CourseDetailsProps {
   slug: string;
