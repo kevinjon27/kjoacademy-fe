@@ -11,5 +11,9 @@ export default async function CourseDetailPage({
     return <h1>No slug provided</h1>;
   }
 
-  return <CourseList slug={slug} />;
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <CourseList slug={slug} />
+    </div>
+  );
 }
