@@ -11,10 +11,12 @@ import { User } from "@/types/user";
 
 export type AuthContextType = {
   user: User | null;
+  authFor: string;
 };
 
 export const AuthContext = createContext<AuthContextType>({
   user: null,
+  authFor: "",
 });
 
 export const AuthProvider = ({
@@ -39,8 +41,9 @@ export const AuthProvider = ({
   const contextValue = useMemo(
     () => ({
       user,
+      authFor,
     }),
-    [user]
+    [user, authFor]
   );
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

@@ -23,7 +23,7 @@ export function CourseCard({ course, onPlay, className }: CourseCardProps) {
     <Card
       className={`group overflow-hidden transition-all duration-200 hover:shadow-md ${className}`}
     >
-      <div className="relative aspect-video overflow-hidden">
+      <div className="relative aspect-3/2 overflow-hidden">
         <Image
           src={course.thumbnail_url}
           alt={course.title}
@@ -35,7 +35,7 @@ export function CourseCard({ course, onPlay, className }: CourseCardProps) {
       </div>
 
       {/* Play button overlay positioned between thumbnail and details */}
-      <div className="relative">
+      {/* <div className="relative">
         <div className="absolute -top-6 right-4 z-10 opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
           <Button
             size="icon"
@@ -46,7 +46,7 @@ export function CourseCard({ course, onPlay, className }: CourseCardProps) {
             <Play className="h-5 w-5 ml-0.5" />
           </Button>
         </div>
-      </div>
+      </div> */}
 
       <CardHeader className="pb-3">
         <h3 className="font-semibold text-lg leading-tight line-clamp-2 h-14">
@@ -56,7 +56,7 @@ export function CourseCard({ course, onPlay, className }: CourseCardProps) {
 
       <CardContent className="pt-0">
         <div className="flex items-center">
-          <Users className="h-5 w-5" />
+          <Users className="h-4 w-4 mr-2" />
           <span className="text-sm text-muted-foreground">
             {course.enrollment_count}{" "}
             {course.enrollment_count === 1 ? "member" : "members"} enrolled
