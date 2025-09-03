@@ -1,8 +1,6 @@
 import { PaginatedRequest } from "@/types/dto/paginated-request";
 
-export type GetCoursesRequest = PaginatedRequest;
-
-export type GetCoursesByCategorySlugRequest = PaginatedRequest;
+export type GetCoursesRequest = PaginatedRequest & { category?: string };
 
 export type CreateCourseRequest = {
   title: string;

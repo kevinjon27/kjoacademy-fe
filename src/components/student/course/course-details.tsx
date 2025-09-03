@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useMemo } from "react";
 import { Play, Video, Clock, Users, BookOpen } from "lucide-react";
 import { humanizeDuration } from "@/lib/time";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,17 +11,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { coursesQueryKey } from "@/lib/query-key/courses";
-import { getCourseBySlug } from "@/api/student/courses.api";
-import { enrollCourse } from "@/api/student/enrollments.api";
 import { useEnrollmentStatus } from "@/guards/withEnrollmentProtection.client";
-import {
-  CourseDetails as CourseDetailsType,
-  CourseDetailsModule,
-  CourseDetailsLesson,
-} from "@/types/course";
-import { toast } from "sonner";
+import { useGetCourseBySlug } from "@/hooks/api/student/use-courses-api";
+import { useEnrollCourse } from "@/hooks/api/student/use-enrollments-api";
+import { CourseDetailsModule, CourseDetailsLesson } from "@/types/course";
 
 interface CourseDetailsProps {
   slug: string;
@@ -111,31 +104,15 @@ export function RenderModulesAndLessons({
 export function CourseDetails({ slug }: CourseDetailsProps) {
   const isEnrolled = useEnrollmentStatus({ slug });
 
-  const { data: course, isLoading: isCourseLoading } = useQuery({
-    queryKey: coursesQueryKey.detail(slug),
-    queryFn: async (): Promise<CourseDetailsType> => {
-      const result = await getCourseBySlug(slug);
-      return result.data;
-    },
-    retry: false,
-  });
+  const { data: courseData, isLoading: isCourseLoading } =
+    useGetCourseBySlug(slug);
+  const course = useMemo(() => courseData?.data, [courseData]);
 
-  const { mutateAsync: doEnrollCourse, isPending: isEnrolling } = useMutation({
-    mutationFn: async (course_id: string) => {
-      const result = await enrollCourse({ course_id });
-      return result.data;
-    },
-    onSuccess: () => {
-      toast.success("You have successfully enrolled in this course");
-    },
-    onError: (error: any) => {
-      const errorMessage =
-        error.response?.data?.message || "Failed to enroll in course";
-      toast.error(errorMessage);
-    },
-  });
+  const { mutateAsync: doEnrollCourse, isPending: isEnrolling } =
+    useEnrollCourse();
 
-  if (!course || isCourseLoading) return <div>Course not found</div>;
+  if (isCourseLoading) return <div>Loading...</div>;
+  if (!course) return <div>Course not found</div>;
 
   return (
     <div className="space-y-8">

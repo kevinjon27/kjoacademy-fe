@@ -17,7 +17,7 @@ export const getCourseCategories = async (
   params: GetCourseCategoryRequest
 ): Promise<GetCourseCategoryResponse> => {
   const response = await axiosClient.get(BASE_URL, {
-    params: sanitizeQueryParams(params || {}),
+    params: sanitizeQueryParams(params),
   });
   return response.data;
 };

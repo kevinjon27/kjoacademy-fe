@@ -3,8 +3,6 @@ import { Course, CourseDetails } from "@/types/course";
 
 export type GetCoursesResponse = PaginatedResponse<Course>;
 
-export type GetCoursesByCategorySlugResponse = PaginatedResponse<Course>;
-
 export type GetCourseResponse = {
   message: string;
   data: Course;

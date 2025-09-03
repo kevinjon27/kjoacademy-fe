@@ -1,10 +1,8 @@
 "use client";
 
 import { createContext, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { enrollmentsQueryKey } from "@/lib/query-key/enrollments";
 import { useAuth } from "@/hooks/useAuth";
-import { getMyEnrollments } from "@/api/student/enrollments.api";
+import { useGetMyEnrollments } from "@/hooks/api/student/use-enrollments-api";
 import { Enrollment } from "@/types/enrollments";
 
 export type EnrollmentContextType = {
@@ -25,15 +23,13 @@ export const EnrollmentProvider = ({
     return authFor === "student" && !!user;
   }, [authFor, user]);
 
-  const { data: enrollments = [] } = useQuery({
+  const { data: enrollmentsData } = useGetMyEnrollments({
     enabled: enableEnrollmentsQuery,
-    queryKey: enrollmentsQueryKey.all,
-    queryFn: async () => {
-      const result = await getMyEnrollments();
-      return result.data;
-    },
-    staleTime: 60 * 5 * 1000,
   });
+  const enrollments = useMemo(
+    () => enrollmentsData?.data ?? [],
+    [enrollmentsData]
+  );
 
   const contextValue = useMemo(
     () => ({

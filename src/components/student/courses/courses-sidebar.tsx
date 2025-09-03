@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
+import { Menu } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { categoriesQueryKey } from "@/lib/query-key/categories";
 import { getCourseCategories } from "@/api/student/categories.api";
@@ -14,8 +15,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useGetCourseCategories } from "@/hooks/api/student/use-categories-api";
 import { CourseCategory } from "@/types/course";
-import { Menu, X } from "lucide-react";
 
 function RenderSkeleton() {
   return Array.from({ length: 5 }).map((_, index) => (
@@ -84,13 +85,21 @@ function SidebarContent({
 
 export function CoursesSidebar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { data: categories = [], isLoading: isCategoriesLoading } = useQuery({
-    queryKey: categoriesQueryKey.all,
-    queryFn: async () => {
-      const result = await getCourseCategories({});
-      return result.data;
-    },
-  });
+
+  const { data: categoriesData, isLoading: isCategoriesLoading } =
+    useGetCourseCategories();
+  const categories = useMemo(
+    () => categoriesData?.data || [],
+    [categoriesData]
+  );
+
+  // const { data: categories = [], isLoading: isCategoriesLoading } = useQuery({
+  //   queryKey: categoriesQueryKey.all,
+  //   queryFn: async () => {
+  //     const result = await getCourseCategories({});
+  //     return result.data;
+  //   },
+  // });
 
   return (
     <>

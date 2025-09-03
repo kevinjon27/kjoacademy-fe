@@ -1,4 +1,5 @@
 import { axiosClient } from "@/lib/axios.client";
+import { sanitizeQueryParams } from "@/lib/query-params";
 import { GetCourseCategoryRequest } from "@/types/dto/course-category-request";
 import { GetCourseCategoryResponse } from "@/types/dto/course-category-response";
 
@@ -8,7 +9,7 @@ export const getCourseCategories = async (
   params: GetCourseCategoryRequest
 ): Promise<GetCourseCategoryResponse> => {
   const response = await axiosClient.get(BASE_URL, {
-    params: params || {},
+    params: sanitizeQueryParams(params),
   });
   return response.data;
 };

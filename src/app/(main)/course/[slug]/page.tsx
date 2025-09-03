@@ -21,8 +21,8 @@ async function getCourseBySlug(slug: string): Promise<CourseDetailsType> {
       method: "GET",
     }
   );
-  const json = await response.json();
-  return json.data;
+
+  return response.json();
 }
 
 export default async function CourseDetailPage({ params }: Props) {
