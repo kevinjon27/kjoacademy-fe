@@ -3,9 +3,6 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Menu } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { categoriesQueryKey } from "@/lib/query-key/categories";
-import { getCourseCategories } from "@/api/student/categories.api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
@@ -92,14 +89,6 @@ export function CoursesSidebar() {
     () => categoriesData?.data || [],
     [categoriesData]
   );
-
-  // const { data: categories = [], isLoading: isCategoriesLoading } = useQuery({
-  //   queryKey: categoriesQueryKey.all,
-  //   queryFn: async () => {
-  //     const result = await getCourseCategories({});
-  //     return result.data;
-  //   },
-  // });
 
   return (
     <>
