@@ -4,6 +4,7 @@ export type Enrollment = {
   id: number;
   course: {
     id: string;
+    slug: string;
   };
   status: EnrollmentStatus;
   progress_percentage: number;

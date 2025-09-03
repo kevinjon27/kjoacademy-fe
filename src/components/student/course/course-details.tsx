@@ -14,6 +14,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { coursesQueryKey } from "@/lib/query-key/courses";
 import { getCourseBySlug } from "@/api/student/courses.api";
+import { useEnrollmentStatus } from "@/guards/withEnrollmentProtection.client";
 import {
   CourseDetails as CourseDetailsType,
   CourseDetailsModule,
@@ -106,6 +107,8 @@ export function RenderModulesAndLessons({
 }
 
 export function CourseDetails({ slug }: CourseDetailsProps) {
+  const { isEnrolled } = useEnrollmentStatus({ slug });
+
   const { data: course, isLoading: isCourseLoading } = useQuery({
     queryKey: coursesQueryKey.detail(slug),
     queryFn: async (): Promise<CourseDetailsType> => {
@@ -143,10 +146,12 @@ export function CourseDetails({ slug }: CourseDetailsProps) {
           {/* Right Side - Course Card */}
           <div className="w-full lg:w-80">
             <Card className="backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="text-xl">Start Learning</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+              {/* <CardHeader>
+                <CardTitle className="text-xl">
+                  {isEnrolled ? "Continue Learning" : "Start Learning"}
+                </CardTitle>
+              </CardHeader> */}
+              <CardContent className="space-y-4 pt-6">
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Modules</span>
@@ -167,7 +172,7 @@ export function CourseDetails({ slug }: CourseDetailsProps) {
                 <Link href={`/course/${course.slug}/learn`}>
                   <Button className="w-full" size="lg">
                     <Play className="h-4 w-4 mr-2" />
-                    Start Course
+                    {isEnrolled ? "Continue Learning" : "Start Course"}
                   </Button>
                 </Link>
               </CardContent>
