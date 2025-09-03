@@ -13,7 +13,5 @@ export const useEnrollmentStatus = ({ slug }: { slug: string }) => {
     return false;
   }, [enrollments, slug]);
 
-  return {
-    isEnrolled,
-  };
+  return isEnrolled;
 };

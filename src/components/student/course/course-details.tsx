@@ -107,7 +107,7 @@ export function RenderModulesAndLessons({
 }
 
 export function CourseDetails({ slug }: CourseDetailsProps) {
-  const { isEnrolled } = useEnrollmentStatus({ slug });
+  const isEnrolled = useEnrollmentStatus({ slug });
 
   const { data: course, isLoading: isCourseLoading } = useQuery({
     queryKey: coursesQueryKey.detail(slug),
@@ -118,7 +118,7 @@ export function CourseDetails({ slug }: CourseDetailsProps) {
     retry: false,
   });
 
-  if (!course) return <div>Course not found</div>;
+  if (!course || isCourseLoading) return <div>Course not found</div>;
 
   return (
     <div className="space-y-8">
