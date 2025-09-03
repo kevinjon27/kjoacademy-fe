@@ -1,0 +1,67 @@
+---
+alwaysApply: false
+---
+
+# Student Enrollments API Contracts
+
+BASE_URL: `${API_BASE_URL}/v1/enrollments`
+
+## GET My Enrollments
+
+- `GET BASE_URL/me`
+  - Get all enrollments data for the currently logged in user
+  - Each enrollment returned should have `txt:responseBody` shape
+
+```txt:responseBody
+{
+  data: {
+    id: number;
+    course: {
+      id: string;
+      slug: string;
+    };
+    status: 'enrolled' | 'in_progress' | 'completed';
+    progress_percentage: number;
+    enrolled_at: string;
+    completed_at: string | null;
+    last_accessed_at: string | null;
+  }[]
+}
+```
+
+## POST Enroll into Course
+
+- `POST BASE_URL/me`
+  - Enroll currently logged user into a course
+  - The request body should have the shape of `txt:requestBody`
+  - Return error 422 with a message if the user tries to enroll again in the course where the user already enrolled in
+  - The returned Enrollment data should have `txt:responseBody` shape
+
+  - **Behaviors**
+    - New enrollment data for the user should be created
+    - Module progress for each module within the course should be created for the user
+    - Lesson progress for each lesson within the course modules should be created for the user
+
+```txt:requestBody
+{
+  course_id: string;
+}
+```
+
+```txt:responseBody
+{
+  message: string,
+  data: {
+    id: number;
+    course: {
+      id: string;
+      slug: string;
+    };
+    status: 'enrolled' | 'in_progress' | 'completed';
+    progress_percentage: number;
+    enrolled_at: string;
+    completed_at: string | null;
+    last_accessed_at: string | null;
+  }
+}
+```

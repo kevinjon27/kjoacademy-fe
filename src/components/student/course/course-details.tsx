@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Play, Video, Clock, Users, BookOpen } from "lucide-react";
 import { humanizeDuration } from "@/lib/time";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -11,15 +11,17 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { coursesQueryKey } from "@/lib/query-key/courses";
 import { getCourseBySlug } from "@/api/student/courses.api";
+import { enrollCourse } from "@/api/student/enrollments.api";
 import { useEnrollmentStatus } from "@/guards/withEnrollmentProtection.client";
 import {
   CourseDetails as CourseDetailsType,
   CourseDetailsModule,
   CourseDetailsLesson,
 } from "@/types/course";
+import { toast } from "sonner";
 
 interface CourseDetailsProps {
   slug: string;
@@ -118,6 +120,21 @@ export function CourseDetails({ slug }: CourseDetailsProps) {
     retry: false,
   });
 
+  const { mutateAsync: doEnrollCourse, isPending: isEnrolling } = useMutation({
+    mutationFn: async (course_id: string) => {
+      const result = await enrollCourse({ course_id });
+      return result.data;
+    },
+    onSuccess: () => {
+      toast.success("You have successfully enrolled in this course");
+    },
+    onError: (error: any) => {
+      const errorMessage =
+        error.response?.data?.message || "Failed to enroll in course";
+      toast.error(errorMessage);
+    },
+  });
+
   if (!course || isCourseLoading) return <div>Course not found</div>;
 
   return (
@@ -169,12 +186,15 @@ export function CourseDetails({ slug }: CourseDetailsProps) {
                   </div>
                 </div>
 
-                <Link href={`/course/${course.slug}/learn`}>
-                  <Button className="w-full" size="lg">
-                    <Play className="h-4 w-4 mr-2" />
-                    {isEnrolled ? "Continue Learning" : "Start Course"}
-                  </Button>
-                </Link>
+                <Button
+                  className="w-full"
+                  size="lg"
+                  disabled={isEnrolling}
+                  onClick={() => doEnrollCourse(course.id)}
+                >
+                  <Play className="h-4 w-4 mr-2" />
+                  {isEnrolled ? "Continue Learning" : "Start Course"}
+                </Button>
               </CardContent>
             </Card>
           </div>
