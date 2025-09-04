@@ -2,6 +2,8 @@
 
 import { useMemo } from "react";
 import { Play, Video, Clock, Users, BookOpen } from "lucide-react";
+import { enrollmentStatus } from "@/config/enrollment-status";
+import { useRouter } from "next/navigation";
 import { humanizeDuration } from "@/lib/time";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,10 +13,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Loader } from "@/components/shared/loader";
 import { useEnrollmentStatus } from "@/guards/withEnrollmentProtection.client";
 import { useGetCourseBySlug } from "@/hooks/api/student/use-courses-api";
-import { useEnrollCourse } from "@/hooks/api/student/use-enrollments-api";
-import { CourseDetailsModule, CourseDetailsLesson } from "@/types/course";
+import {
+  useEnrollCourse,
+  useGetCourseProgress,
+} from "@/hooks/api/student/use-enrollments-api";
+import {
+  CourseDetailsModule,
+  CourseDetailsLesson,
+  CourseDetails as CourseDetailsType,
+} from "@/types/course";
 
 interface CourseDetailsProps {
   slug: string;
@@ -101,7 +111,11 @@ export function RenderModulesAndLessons({
   );
 }
 
+/**
+ * Main Component
+ */
 export function CourseDetails({ slug }: CourseDetailsProps) {
+  const router = useRouter();
   const isEnrolled = useEnrollmentStatus({ slug });
 
   const { data: courseData, isLoading: isCourseLoading } =
@@ -111,7 +125,39 @@ export function CourseDetails({ slug }: CourseDetailsProps) {
   const { mutateAsync: doEnrollCourse, isPending: isEnrolling } =
     useEnrollCourse();
 
-  if (isCourseLoading) return <div>Loading...</div>;
+  const { data: courseProgressData, isLoading: isCourseProgressLoading } =
+    useGetCourseProgress({
+      enabled: isEnrolled,
+      courseId: course?.id || "",
+    });
+
+  const isPageLoading = isCourseLoading;
+  const isActionLoading = isEnrolling;
+
+  const onPlayCourseClick = (course: CourseDetailsType) => {
+    // Execute enrollment if the user is not enrolled yet
+    if (!isEnrolled) {
+      doEnrollCourse(course.id);
+      return;
+    }
+
+    // Redirect user to the learn lesson page if the user is enrolled
+    if (courseProgressData) {
+      const { data: courseProgress } = courseProgressData;
+      // The user is enrolled, but has no progress yet
+      // Redirect user to the learn lesson page to learn the first module and lesson
+      if (
+        courseProgress.overall_progress.status === enrollmentStatus.ENROLLED
+      ) {
+        const firstModule = courseProgress.modules[0];
+        const firstLesson = firstModule.lessons[0];
+        router.push(`/course/${course.slug}/learn/${firstLesson.id}`);
+        return;
+      }
+    }
+  };
+
+  if (isPageLoading) return <div>Loading...</div>;
   if (!course) return <div>Course not found</div>;
 
   return (
@@ -166,10 +212,14 @@ export function CourseDetails({ slug }: CourseDetailsProps) {
                 <Button
                   className="w-full"
                   size="lg"
-                  disabled={isEnrolling}
-                  onClick={() => doEnrollCourse(course.id)}
+                  disabled={isActionLoading}
+                  onClick={() => onPlayCourseClick(course)}
                 >
-                  <Play className="h-4 w-4 mr-2" />
+                  {isActionLoading ? (
+                    <Loader />
+                  ) : (
+                    <Play className="h-4 w-4 mr-2" />
+                  )}
                   {isEnrolled ? "Continue Learning" : "Start Course"}
                 </Button>
               </CardContent>

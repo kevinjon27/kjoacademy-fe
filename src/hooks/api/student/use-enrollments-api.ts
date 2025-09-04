@@ -2,12 +2,17 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { enrollmentsQueryKey } from "@/lib/query-key/enrollments";
-import { getMyEnrollments, enrollCourse } from "@/api/student/enrollments.api";
+import {
+  getMyEnrollments,
+  enrollCourse,
+  getCourseProgress,
+} from "@/api/student/enrollments.api";
 import { toast } from "sonner";
 import { EnrollCourseRequest } from "@/types/dto/student/enrollment-request";
 import {
   GetMyEnrollmentsResponse,
   EnrollCourseResponse,
+  GetCourseProgressResponse,
 } from "@/types/dto/student/enrollment-response";
 
 // Query hooks for student enrollments
@@ -47,5 +52,23 @@ export const useEnrollCourse = () => {
         error.response?.data?.message || "Failed to enroll in this course";
       toast.error(errorMessage);
     },
+  });
+};
+
+export const useGetCourseProgress = ({
+  enabled,
+  courseId,
+}: {
+  enabled: boolean;
+  courseId: string;
+}) => {
+  return useQuery({
+    enabled,
+    queryKey: enrollmentsQueryKey.courseProgress(courseId),
+    queryFn: async (): Promise<GetCourseProgressResponse> => {
+      const result = await getCourseProgress(courseId);
+      return result;
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
